@@ -1,0 +1,173 @@
+﻿// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[DEFNAME GeneratorWeaponList]
+WeaponGeneration = "Swordsmanship,Fencing,Macefighting,Archery"
+WeaponGenerationMagic = "Swordsmanship,Fencing,Macefighting,Archery"
+
+
+[DEFNAME GeneratorWeaponTables]
+WeaponSwordsmanshipAmount = 24
+WeaponSwordsmanshipHitpoints = {50 56}
+WeaponSwordsmanshipTypedef = t_weapon_sword
+WeaponSwordsmanship_1  	Cleaver,			 0ec2, i_cleaver_meat,		  6-6, 50,  3.0,  45, 10, 0, 0,  0ec3
+WeaponSwordsmanship_2	Pickaxe, 			 0e85, i_pickaxe, 			 8-11, 42,  5.0,  60, 50, 0, 0,  0e86, t_weapon_mace_pick
+WeaponSwordsmanship_3	Katana,				013fe, i_katana,			10-11, 42,  6.0, 120, 25, 0, 0, 013ff
+WeaponSwordsmanship_4	Cutlass,			01440, i_cutlass,			10-11, 40,  8.0, 120, 25, 0, 0, 01441
+WeaponSwordsmanship_5	Scimitar,			013b5, i_scimitar,			 9-12, 38,  7.8, 150, 25, 0, 0, 013b6
+WeaponSwordsmanship_6	Broadsword,			 0f5e, i_sword_broad,		12-15, 38,  9.6, 180, 25, 0, 0,  0f5f
+WeaponSwordsmanship_7	Longsword,			 0f60, i_sword_long,		13-16, 38, 11.4, 240, 32, 0, 0,  0f61
+WeaponSwordsmanship_8	Longsword, 			013b7, i_sword_long_b, 		13-16, 38,  7.0, 240, 35, 0, 0, 013b8
+WeaponSwordsmanship_9	Viking Sword,		013b9, i_sword_viking, 		14-16, 30,  6.0, 210, 40, 0, 0, 013ba
+WeaponSwordsmanship_10	Radant Scimitar,	02d27, i_radiant_scimitar,	15-16, 30,  9.0, 500, 20, 0, 0, 02d33	// +9
+WeaponSwordsmanship_11 	War Cleaver,		02d23, i_sword_warcleaver,	14-15, 38,  5.0, 500, 10, 0, 0, 02d2f	// +9
+WeaponSwordsmanship_12 	Paladin Sword,		026ce, i_sword_paladin,		13-16, 34, 16.0, 500, 90, 0, 0, 026cf	// +9
+WeaponSwordsmanship_13	Hatchet,		 	 0f43, i_hatchet,			 9-14, 31,  5.4,  90, 20, 1, 0,  0f44, t_weapon_axe
+WeaponSwordsmanship_14	Axe,	 		 	 0f49, i_axe,				 9-14, 31, 11.0, 150, 22, 1, 0,  0f4a, t_weapon_axe
+WeaponSwordsmanship_15	Double Axe, 		 0f4b, i_axe_double,		10-15, 30, 12.0, 255, 36, 1, 0,  0f4c, t_weapon_axe
+WeaponSwordsmanship_16	Two-Hand Axe,		01442, i_axe_two_hand,		12-16, 30,  8.0, 240, 40, 1, 0, 01443, t_weapon_axe
+WeaponSwordsmanship_17	Battle Axe,	 	 	 0f47, i_axe_battle,		12-16, 30,  6.3, 135, 20, 1, 0,  0f48, t_weapon_axe
+WeaponSwordsmanship_18	Executioner's Axe,   0f45, i_axe_exec,			14-16, 28,  9.9, 180, 26, 1, 0,  0f46, t_weapon_axe
+WeaponSwordsmanship_19	Large Battle Axe,	013fa, i_axe_battle_large,	14-16, 28, 12.9, 165, 80, 1, 0, 013fb, t_weapon_axe
+WeaponSwordsmanship_20	Halberd,			0143e, i_halberd,			18-20, 20, 24.0, 300, 95, 1, 0, 0143f, t_weapon_axe
+WeaponSwordsmanship_21	Bardiche,		 	 0f4d, i_bardiche,			16-18, 22, 13.5, 270, 40, 1, 0,  0f4e, t_weapon_axe
+WeaponSwordsmanship_22	Scythe, 			026ba, i_scythe,			18-20, 25,  5.0, 500, 45, 1, 0, 026c4, t_weapon_axe		// +9 
+WeaponSwordsmanship_23	Ornate Axe,			02d28, i_ornate_axe,		16-18, 28, 12.0, 500, 45, 1, 0, 02d34, t_weapon_axe		// +9
+WeaponSwordsmanship_24	Crescent Blade,		026c1, i_crescent_blade,	16-17, 28,  1.0, 500, 55, 1, 0, 026cb, t_weapon_axe		// +9
+
+WeaponFencingAmount = 15
+WeaponFencingHitpoints = {50 56}
+WeaponFencingTypedef = t_weapon_fence
+WeaponFencing_1		Dagger,			 		 0f51, i_dagger,				  6-6, 50,  4.0,  30,  4, 0, 0,  0f52
+WeaponFencing_2 	Butcher Knife,	       	013f6, i_knife_butcher,		 	  2-8, 45,  4.0,  30,  5, 0, 0, 013f7
+WeaponFencing_3 	Skinning Knife,			 0ec4, i_knife_skinning,	      2-8, 45,  2.0,  30,  5, 0, 0,  0ec5
+WeaponFencing_4		Kryss,					01400, i_kryss,					13-15, 42,  8.0, 120, 10, 0, 0, 01401
+WeaponFencing_5 	Elven Spellblade,		02d20, i_elven_spellblade,		12-15, 42,  5.0, 150, 35, 0, 0, 02d2c
+WeaponFencing_6		Elven Machete, 			02d29, i_elven_machete, 		13-15, 40,  7.0, 210, 20, 0, 0, 02d35
+WeaponFencing_7		War Fork,				01404, i_war_fork,				13-16, 38,  8.0, 180, 40, 0, 0, 01405
+WeaponFencing_8		Bone Harvester,			026bb, i_bone_harvester, 	   	15-16, 40,  3.0, 500, 25, 0, 0, 026c5	// +9
+WeaponFencing_9		Lance,					026c0, i_lance,					15-18, 32, 12.0, 500, 95, 0, 0, 026ca	// +9
+WeaponFencing_10	Short Spear,			01402, i_spear_short,			14-16, 24,  4.0,  90, 40, 1, 0, 01403
+WeaponFencing_11	Spear,			 		 0f62, i_spear,					15-16, 22, 16.0, 180, 50, 1, 0,  0f63
+WeaponFencing_12	Pitchfork,		 		 0e87, i_pitchfork,				15-16, 22, 11.0, 180, 50, 1, 0,  0e88
+WeaponFencing_13	Bladed Staff,			026bd, i_staff_bladed,			17-19, 22,  4.0, 500, 40, 1, 0, 026c7	// +9
+WeaponFencing_14	Pike,					026be, i_pike,					16-18, 22,  8.0, 500, 50, 1, 0, 026c8	// +9
+WeaponFencing_15	Double Bladed Staff,	026bf, i_staff_bladed_double,	18-19, 20,  2.0, 500, 50, 1, 0, 026c9	// +9
+
+WeaponMacefightingAmount = 18
+WeaponMacefightingHitpoints = {50 56}
+WeaponMacefightingTypedef = t_weapon_mace_smith
+WeaponMacefighting_1	Smith Hammer,		013e3, i_hammer_smith,		  6-6, 50,  7.0,  90,  5, 0, 0, 013b4, t_weapon_mace_smith
+WeaponMacefighting_2	Sledge Hammer,		 0fb4, i_hammer_sledge, 	  2-8, 40,  8.0,  60, 20, 0, 0,  0fb5, t_weapon_mace_smith
+WeaponMacefighting_3	Club,				013b3, i_club,				10-12, 40,  6.0,  45, 40, 0, 0, 013b4
+WeaponMacefighting_4	Mace,				 0f5c, i_mace,				13-15, 34,  8.0,  90, 45, 0, 0,  0f5d
+WeaponMacefighting_5	Maul,				0143a, i_maul,				13-15, 34, 10.0, 150, 45, 0, 0, 0143b
+WeaponMacefighting_6	War Axe,			013af, i_axe_War,			14-16, 32,  9.0, 165, 35, 0, 0, 013b0
+WeaponMacefighting_7	War Mace,			01406, i_mace_war,			15-17, 29, 17.0, 210, 80, 0, 0, 01407
+WeaponMacefighting_8	Diamond Mace,		02d24, i_mace_diamond,		14-17, 29, 10.0, 500, 35, 0, 0, 02d30, t_weapon_mace_sharp	// +9
+WeaponMacefighting_9  	Wild Staff,			02d25, i_staff_wild,		11-13, 34,  9.0, 500, 40, 0, 0, 02d31, t_weapon_mace_staff	// +9
+WeaponMacefighting_10	Shepherd's Crook,	013f4, i_shepherds_crook,	16-18, 25,  7.0,  40, 20, 1, 0, 013f5, t_weapon_mace_crook
+WeaponMacefighting_11	Shepherd's Crook,	 0e81, i_crook_thin, 		16-18, 25,  7.0,  40, 20, 1, 0,  0e82, t_weapon_mace_crook
+WeaponMacefighting_12	Quarter Staff,		 0e89, i_staff_quarter, 	16-18, 25,  8.0,  45, 20, 1, 0,  0e8a, t_weapon_mace_staff
+WeaponMacefighting_13 	Gnarled Staff,		013f8, i_staff_gnarled, 	16-18, 25,  3.0,  35, 20, 1, 0, 013f9, t_weapon_mace_staff
+WeaponMacefighting_14	Black Staff, 		 0df0, i_staff_black, 		16-18, 25,  9.0,  70, 20, 1, 0,  0df1, t_weapon_mace_staff
+WeaponMacefighting_15	Hammer Pick,		0143c, i_hammer_pick,		18-20, 20,  9.0, 225, 45, 1, 0, 0143d
+WeaponMacefighting_16	War Hammer,			01438, i_hammer_war,		20-22, 18, 10.0, 240, 95, 1, 0, 01439
+WeaponMacefighting_17	Scepter,			026bc, i_scepter,			15-16, 23,  8.0, 500, 40, 1, 0, 026c6 // +9
+WeaponMacefighting_18	Tetsubo,			027a6, i_tetsubo,			19-20, 20,  8.0, 500, 35, 1, 0, 027f1 // +9
+
+WeaponArcheryAmount = 8
+WeaponArcheryHitpoints = {50 56}
+WeaponArcheryTypedef = t_weapon_bow
+WeaponArcheryAmmo = i_arrow, i_arrow_x
+WeaponArchery_1		Bow,	 					013b1, i_bow,			   			10-11, 30,  8.0,  20, 20, 1, 11, 013b2 			
+WeaponArchery_2 	Composite Bow,			 	026c2, i_bow_composite,		   		13-15, 32, 14.9,  26, 45, 1, 11, 026cc	
+WeaponArchery_3 	Crossbow,					 0f4f, i_crossbow,		   			10-12, 26,  9.0,  33, 30, 1,  9, 0f50	
+WeaponArchery_4  	Crossbow Heavy,	        	013fc, i_crossbow_heavy,	 		14-17, 22, 14.0,  35, 80, 1, 10, 013fd 	
+WeaponArchery_5		Repeating Crossbow,		 	026c3, i_crossbow_repeating, 		16-18, 25, 22.0,  34, 30, 1, 11, 026cd
+WeaponArchery_6		Magical Shortbow,			02d1f, i_magical_shortbow,	    	13-16, 30, 12.0,  29, 75, 1, 12, 02d2b 
+WeaponArchery_7 	Elven Composite Longbow,	02d1e, i_elven_composite_longbow,	14-16, 28, 10.0,  35, 45, 1, 12, 02d2a 
+WeaponArchery_8		Yumi,			       		027a5, i_yumi,						14-16, 28, 10.9,  29, 75, 1, 12, 027f0
+
+
+[DEFNAME GeneratorWeaponSkillmake]
+WeaponSwordsmanship_1_Makelist		Cleaver,			        Tinkering 20.0,  3 i_ingot_iron
+WeaponSwordsmanship_2_Makelist		Pickaxe, 					Tinkering 40.0,  4 i_ingot_iron
+WeaponSwordsmanship_3_Makelist		Katana,					Blacksmithing 44.1,  8 i_ingot_iron
+WeaponSwordsmanship_4_Makelist		Cutlass,				Blacksmithing 24.3,  8 i_ingot_iron
+WeaponSwordsmanship_5_Makelist		Scimitar,				Blacksmithing 31.7, 10 i_ingot_iron
+WeaponSwordsmanship_6_Makelist		Broadsword,				Blacksmithing 48.8, 12 i_ingot_iron
+WeaponSwordsmanship_7_Makelist		Longsword,				Blacksmithing 53.8, 16 i_ingot_iron
+WeaponSwordsmanship_8_Makelist		Longsword,				Blacksmithing 53.8, 16 i_ingot_iron
+WeaponSwordsmanship_9_Makelist		Viking Sword,			Blacksmithing 24.3, 14 i_ingot_iron
+WeaponSwordsmanship_10_Makelist		Radiant Scimitar,		NOSKILLMAKE
+WeaponSwordsmanship_11_Makelist		War Cleaver,			NOSKILLMAKE
+WeaponSwordsmanship_12_Makelist		Paladin Sword,			NOSKILLMAKE
+WeaponSwordsmanship_13_Makelist		Hatchet,		    		Tinkering 30.0,  6 i_ingot_iron
+WeaponSwordsmanship_14_Makelist		Axe,					Blacksmithing 46.7, 10 i_ingot_iron
+WeaponSwordsmanship_15_Makelist		Double Axe,				Blacksmithing 54.5, 17 i_ingot_iron
+WeaponSwordsmanship_16_Makelist		Two-Handed Axe,			Blacksmithing 33.0, 16 i_ingot_iron
+WeaponSwordsmanship_17_Makelist		Battle Axe,				Blacksmithing 56.1,  9 i_ingot_iron
+WeaponSwordsmanship_18_Makelist		Executioner's Axe,		Blacksmithing 50.7, 12 i_ingot_iron
+WeaponSwordsmanship_19_Makelist		Large Battle Axe,		Blacksmithing 28.0, 11 i_ingot_iron
+WeaponSwordsmanship_20_Makelist		Halberd,				Blacksmithing 39.1, 20 i_ingot_iron
+WeaponSwordsmanship_21_Makelist		Bardiche,				Blacksmithing 57.3, 18 i_ingot_iron
+WeaponSwordsmanship_22_Makelist		Scythe,			  		NOSKILLMAKE
+WeaponSwordsmanship_23_Makelist		Ornate Axe,		  		NOSKILLMAKE
+WeaponSwordsmanship_24_Makelist		Crescent Blade,			NOSKILLMAKE
+
+WeaponFencing_1_Makelist		Dagger,					Blacksmithing  0.1,  2 i_ingot_iron
+WeaponFencing_2_Makelist		Butcher Knife,		  		Tinkering 25.0,  2 i_ingot_iron
+WeaponFencing_3_Makelist		Skinning Knife,		   		Tinkering 25.0,  2 i_ingot_iron
+WeaponFencing_4_Makelist		Kryss,					Blacksmithing 32.7,  8 i_ingot_iron
+WeaponFencing_5_Makelist		Elven Spellblade,		Blacksmithing 45.0, 10 i_ingot_iron
+WeaponFencing_6_Makelist		Elven Machete,			Blacksmithing 55.0, 14 i_ingot_iron
+WeaponFencing_7_Makelist		War Fork,				Blacksmithing 42.9, 12 i_ingot_iron
+WeaponFencing_8_Makelist		Bone Harvester,		 	NOSKILLMAKE
+WeaponFencing_9_Makelist		Lance,					NOSKILLMAKE
+WeaponFencing_10_Makelist		Short Spear,			Blacksmithing 45.3,  6 i_ingot_iron
+WeaponFencing_11_Makelist		Spear,					Blacksmithing 49.0, 12 i_ingot_iron
+WeaponFencing_12_Makelist		Pitchfork,				Blacksmithing 41.2, 12 i_ingot_iron
+WeaponFencing_13_Makelist		Bladed Staff,			NOSKILLMAKE
+WeaponFencing_14_Makelist		Pike,					NOSKILLMAKE
+WeaponFencing_15_Makelist		Double Bladed Staff,  	NOSKILLMAKE
+
+WeaponMacefighting_1_Makelist  	Smith Hammer,				Tinkering 40.0,  6 i_ingot_iron
+WeaponMacefighting_2_Makelist	Sledge Hammer,				Tinkering 40.0,  4 i_ingot_iron
+WeaponMacefighting_3_Makelist	Club,						Carpentry 65.0,  5 i_log			
+WeaponMacefighting_4_Makelist	Mace,					Blacksmithing 40.8,  6 i_ingot_iron
+WeaponMacefighting_5_Makelist	Maul,					Blacksmithing 19.4, 10 i_ingot_iron	
+WeaponMacefighting_6_Makelist	War Axe,				Blacksmithing 48.4, 11 i_ingot_iron			
+WeaponMacefighting_7_Makelist	War Mace,				Blacksmithing 28.0, 14 i_ingot_iron			
+WeaponMacefighting_8_Makelist	Diamond Mace,		 	NOSKILLMAKE
+WeaponMacefighting_9_Makelist 	Wild Staff,			  	NOSKILLMAKE
+WeaponMacefighting_10_Makelist  Shepherd's Crook,			Carpentry 38.9,  7 i_log	
+WeaponMacefighting_11_Makelist	Shepherd's Crook,			Carpentry 38.9,	 7 i_log
+WeaponMacefighting_12_Makelist  Quarter Staff,		  	 	Carpentry 44.0,  8 i_log
+WeaponMacefighting_13_Makelist  Gnarled Staff,		  	 	Carpentry 58.9,  7 i_log
+WeaponMacefighting_14_Makelist	Black Staff, 				Carpentry 72.0,  9 i_log
+WeaponMacefighting_15_Makelist	Hammer Pick,			Blacksmithing 34.2, 15 i_ingot_iron
+WeaponMacefighting_16_Makelist	War Hammer,				Blacksmithing 34.2, 16 i_ingot_iron
+WeaponMacefighting_17_Makelist 	Scepter,		  		NOSKILLMAKE
+WeaponMacefighting_18_Makelist  Tetsubo,		  		NOSKILLMAKE
+
+WeaponArchery_1_Makelist		Bow,			     		 Bowcraft 17.8, 2 i_log
+WeaponArchery_2_Makelist		Composite Bow,		     	 Bowcraft 70.0, 7 i_log, 1 i_ingot_silver
+WeaponArchery_3_Makelist		Crossbow,		     		 Bowcraft 37.8, 7 i_log, 1 i_ingot_iron,1 i_wire_iron
+WeaponArchery_4_Makelist	 	Crossbow Heavy,	   	     	 Bowcraft 57.8, 1 i_ingot_iron, 1 i_wire_iron
+WeaponArchery_5_Makelist		Repeating Crossbow,	  		 Bowcraft 67.9, 2 i_ingot_iron, 1 i_wire_iron
+WeaponArchery_6_Makelist		Magical Shortbow,	  	NOSKILLMAKE
+WeaponArchery_7_Makelist		Elven Composite LBow,	NOSKILLMAKE
+WeaponArchery_8_Makelist		Yumi,			  		NOSKILLMAKE
+
+
+[DEFNAME GeneratorWeaponAmmo]
+WeaponArchery_3_Ammo = i_xbolt, i_xbolt_x
+WeaponArchery_4_Ammo = i_xbolt, i_xbolt_x
+WeaponArchery_5_Ammo = i_xbolt, i_xbolt_x
+
+[EOF]

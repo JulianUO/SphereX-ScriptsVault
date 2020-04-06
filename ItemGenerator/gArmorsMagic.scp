@@ -1,0 +1,42 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[FUNCTION f_SphereGenerateArmorsMagic]
+serv.log @SArmorGenerator :: Starting (magic) generation.
+for 0 <eval <f_Resources <def.ArmorGenerationMagic>> - 1>
+	local.artype = <f_GetARGV <local._for> <def.ArmorGenerationMagic>>
+	local.topen = "generador/Items/Armor/Magic/iam<local.artype>.scp"
+	if <file.fileexist <local.topen>>
+		file.deletefile <local.topen>
+	endif
+	if !<file.open <local.topen>>
+		serv.log @SArmorGenerator :: Unable to generate armor (<local.artype>)
+	else
+		serv.log @SArmorGenerator :: File opened for armor (<local.artype>)
+		for m 1 <def.ArmorMagicAmount>
+			for w 1 <def.Armor<local.artype>Amount>
+				args = <def.Armor<local.artype>_<dlocal.w>>
+				file.writeline "[ITEMDEF <argv[2]>_<strtolower <f_GetARGV 0 <def.ArmorMagic_<dlocal.m>>>>]"
+				file.writeline "ID=<argv[2]>"
+				file.writeline "NAME=<argv[0]>"
+				file.writeline "CATEGORY=Provisions - Armors Magic"
+				file.writeline "SUBSECTION=<local.artype>"
+				file.writeline "DESCRIPTION=<argv[0]> of <f_GetARGV 0 <def.ArmorMagic_<dlocal.m>>>"
+				file.writeline " "
+				file.writeline "ON=@Create"
+				file.writeline "HITPOINTS=<argv[9]>"
+				file.writeline "EVENTS=t_enhanced_item"
+				file.writeline "MODAR=<f_GetARGV 1 <def.ArmorMagic_<dlocal.m>>>"
+				file.writeline " "
+			endfor
+		endfor
+	file.close
+	endif
+endfor
+serv.log @SArmorGenerator :: Generation finished.
+
+[EOF]

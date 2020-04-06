@@ -1,0 +1,15 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[DEFNAME GeneratorMagicWeaponsBonus]
+WeaponMagicAmount = 4
+WeaponMagic_1	Ruin, 1
+WeaponMagic_2	Force, 3
+WeaponMagic_3	Power, 6
+WeaponMagic_4	Vanquishing, 9
+
+[EOF]

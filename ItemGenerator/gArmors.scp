@@ -1,0 +1,86 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[FUNCTION f_SphereGenerateArmors]
+serv.log @SArmorGenerator :: Starting generation.
+for 0 <eval <f_Resources <def.ArmorGeneration>> - 1>
+	local.armor = <f_GetARGV <local._for> <def.ArmorGeneration>>
+	local.topen = "generador/Items/Armor/ia<local.armor>.scp"
+	if <file.fileexist <local.topen>>
+		file.deletefile <local.topen>
+	endif
+	if !<file.open <local.topen>>
+		serv.log @SArmorGenerator :: Unable to generate armor (<local.armor>)
+	else
+		serv.log @SArmorGenerator :: File opened for armor (<local.armor>)
+		for s 1 <def.Armor<local.armor>Amount>
+			if <isempty <def.Armor<local.armor>_<dlocal.s>>>
+				file.close
+				return 1
+			endif
+			args = <def.Armor<local.armor>_<dlocal.s>>
+			file.writeline "[ITEMDEF <argv[1]>]"
+			file.writeline "DEFNAME=<argv[2]>"
+			file.writeline "NAME=<argv[0]>"
+			file.writeline "TYPE=<def.Armor<local.armor>Type>"
+			file.writeline "ARMOR=<argv[3]>"
+			if <argv[5]> != -1
+				file.writeline "VALUE=<dargv[5]>"
+			else
+				local.value = <serv.itemdef.<def.Armor<local.armor>ResourceID>.value>
+				file.writeline "VALUE=<eval (<argv[7]> * <local.value>)>"
+			endif
+			file.writeline "WEIGHT=<argv[4]>"
+			file.writeline "REQSTR=<argv[8]>"
+			if <argv[7]> != -1
+				file.writeline "RESOURCES=<argv[7]> <def.Armor<local.armor>ResourceID>"
+			else
+				if !<isempty <def.Armor<local.armor>_<dlocal.s>_Resources>>
+					file.writeline = "RESOURCES=<def.Armor<local.armor>_<dlocal.s>_Resources>"
+				endif
+			endif
+			if <argv[6]> != -1
+				file.writeline "SKILLMAKE=<def.Armor<local.armor>Skillmake> <argv[6]>"
+			else
+				if !<isempty <def.Armor<local.armor>_<dlocal.s>_Skillmake>>
+					file.writeline = "SKILLMAKE=<def.Armor<local.armor>_<dlocal.s>_Skillmake>"
+				endif
+			endif
+			if !<isempty <argv[11]>>
+				file.writeline "CAN=CAN_U_HUMAN|CAN_U_FEMALE"
+			else
+				file.writeline "CAN=CAN_U_HUMAN"
+			endif
+			if <def.Armor<local.armor>PenaltyMagery> != 0
+				file.writeline "TAG.Penalty.Magery = <eval (<def.Armor<local.armor>Layer_<serv.itemdef.<argv[1]>.layer>> * <def.Armor<local.armor>PenaltyMagery>) / 100>"
+			endif
+			if <def.Armor<local.armor>PenaltyStealth> != 0
+				file.writeline "TAG.Penalty.Stealth = <eval (<def.Armor<local.armor>Layer_<serv.itemdef.<argv[1]>.layer>> * <def.Armor<local.armor>PenaltyStealth>) / 100>"
+			endif
+			file.writeline "CATEGORY=Provisions - Armor"
+			file.writeline "SUBSECTION=<local.armor>"
+			file.writeline "DESCRIPTION=<argv[0]>"
+			if <argv[10]> != 0
+				file.writeline "DUPELIST=<argv[10]>"
+				file.writeline "FLIP=1"
+			endif
+			file.writeline " "
+			file.writeline "ON=@Create"
+			file.writeline "HITPOINTS=<argv[9]>"
+			file.writeline " "
+			if <argv[10]> != 0
+				file.writeline "[ITEMDEF <argv[10]>]"
+				file.writeline "DUPEITEM=<argv[1]>"
+				file.writeline " "
+			endif
+		endfor
+	endif
+	file.close
+endfor
+serv.log @SArmorGenerator :: Generation finished.
+
+[EOF]

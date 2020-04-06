@@ -1,0 +1,126 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[FUNCTION f_SphereGenerateWeapons]
+serv.log @SWeaponGenerator :: Starting generation.
+for 0 <eval <f_Resources <def.WeaponGeneration>> - 1>
+	local.weapon = <f_GetARGV <local._for> <def.WeaponGeneration>>
+	local.topen = "generador/Items/Weapon/iw<local.weapon>.scp"
+	if <file.fileexist <local.topen>>
+		file.deletefile <local.topen>
+	endif
+	if !<file.open <local.topen>>
+		serv.log @SWeaponGenerator :: Unable to generate weapons (<local.weapon>)
+	else
+		serv.log @SWeaponGenerator :: File opened for weapons (<local.weapon>)
+		for s 1 <def.Weapon<local.weapon>Amount>
+			if <isempty <def.Weapon<local.weapon>_<dlocal.s>>>
+				file.close
+				return 1
+			endif
+			args = <def.Weapon<local.weapon>_<dlocal.s>>
+			file.writeline "[ITEMDEF <argv[1]>]"
+			file.writeline "DEFNAME=<argv[2]>"
+			file.writeline "NAME=<argv[0]>"
+				if !<isempty <argv[11]>>
+					local.type = <argv[11]>
+				else
+					local.type = <def.Weapon<local.weapon>Typedef>
+				endif
+			file.writeline "TYPE=<local.type>"
+			file.writeline "DAM=<Explode -,<argv[3]>>"
+			file.writeline "SPEED=<argv[4]>"
+			file.writeline "WEIGHT=<argv[5]>"
+			file.writeline "VALUE=<argv[6]>"
+				if <argv[7]> != 0
+					file.writeline "REQSTR=<argv[7]>"
+				endif
+				if <argv[8]> != 0
+					file.writeline "TWOHANDS=Y"
+					if <argv[9]> != 0
+						if <argv[9]> > 2
+							file.writeline "RANGE=2,<argv[9]>"
+						else
+							file.writeline "RANGE=<argv[9]>"
+						endif
+					endif
+				else
+					file.writeline "TWOHANDS=N"
+				endif
+			file.writeline "SKILL=<local.weapon>"
+				if (strmatch(<local.weapon>,Archery))
+					if !<isempty <def.WeaponArchery_<dlocal.s>_Ammo>>
+						file.writeline "TDATA3=<f_GetARGV 0 <def.WeaponArchery_<dlocal.s>_Ammo>>"
+						file.writeline "TDATA4=<f_GetARGV 1 <def.WeaponArchery_<dlocal.s>_Ammo>>"
+					else
+						file.writeline "TDATA3=<f_GetARGV 0 <def.WeaponArcheryAmmo>>"
+						file.writeline "TDATA4=<f_GetARGV 1 <def.WeaponArcheryAmmo>>"
+					endif
+				endif
+			file.writeline "CANUSE=CAN_U_HUMAN"
+				if !<isempty <argv[10]>>
+					file.writeline "DUPELIST=<argv[10]>"
+				endif
+			// Update for existing items
+			// This should update every important value.
+			local.toupdate = <argv[2]>
+				forinstances <local.toupdate>
+					type = <local.type>
+					dam = <explode -,<argv[3]>>
+					speed = <argv[4]>
+					weight = <argv[5]>
+					if <argv[9]> != 0
+						if <argv[9]> > 2
+							range = 2,<argv[9]>
+						else
+							range = <argv[9]>
+						endif
+					else
+						if <range> > 1
+							range = 1
+						endif
+					endif
+				endfor
+			// Continue with the item creation
+			// Towards skillmake, resources and axis cats.
+			if !<isempty <def.Weapon<local.weapon>_<dlocal.s>_Makelist>>
+				args = <def.Weapon<local.weapon>_<dlocal.s>_Makelist>
+				if (strcmpi(<argv[1]>,NOSKILLMAKE))
+					if !(strcmpi(<strarg <argv[1]>>,Carpentry))
+						file.writeline "SKILLMAKE=<argv[1]>, t_carpentry"
+					else
+						file.writeline "SKILLMAKE=<argv[1]>"
+					endif
+				local.res = "RESOURCES=<argv[2]>"
+					if <argv> > 3
+						for a 3 <eval <argv> - 1>
+							local.res .= ", <argv[<dlocal.a>]>"
+						endfor
+					endif
+				file.writeline <local.res>
+				endif
+			endif
+			file.writeline "CATEGORY=Provisions - Weapons"
+			file.writeline "SUBSECTION=<local.weapon>"
+			file.writeline "DESCRIPTION=<argv[0]>"
+			file.writeline " "
+			file.writeline "ON=@Create"
+			file.writeline "HITPOINTS=<def.Weapon<local.weapon>Hitpoints>"
+			file.writeline " "
+			args = <def.Weapon<local.weapon>_<dlocal.s>>
+				if !<isempty <argv[10]>>
+					file.writeline "[ITEMDEF <argv[10]>]"
+					file.writeline "DUPEITEM=<argv[1]>
+					file.writeline " "
+				endif
+			endfor
+		file.close
+	endif
+endfor
+serv.log @SWeaponGenerator :: Generation finished.
+
+[EOF]

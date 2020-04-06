@@ -1,0 +1,36 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[DEFNAME GeneratorMaterialList]
+ArmorColoredGeneration = "Blacksmithing,Tailoring"
+
+// Name, MinSkillCraft, ResourceID, ArmorBonus, ShieldArBonus, AddSkillDiff
+[DEFNAME GeneratorBlacksmithMaterials]
+BlacksmithingMaterialAmount = 13
+BlacksmithingMaterial_1  = Iron,		 0.0,	i_ingot_iron,		 0,	 0,	 	 0.0
+BlacksmithingMaterial_2  = Copper,		46.0,	i_ingot_copper,		 5,	 1,		 4.0
+BlacksmithingMaterial_3  = Silver,		50.0,	i_ingot_silver,		 8,	 2,		 6.0
+BlacksmithingMaterial_4  = Gold,		54.0,	i_ingot_gold,		10,	 3,		 8.0
+BlacksmithingMaterial_5  = Rose,		65.0,	i_ingot_rose,		15,	 4,		10.0
+BlacksmithingMaterial_6  = Verite,		70.0,	i_ingot_verite,		20,	 5,		12.0
+BlacksmithingMaterial_7  = Bloodrock,	74.0,	i_ingot_bloodrock,	25,	 6,		16.0
+BlacksmithingMaterial_8  = Shadow,		80.0,	i_ingot_shadow,		30,	 7,		20.0
+BlacksmithingMaterial_9  = Agapite,		80.0,	i_ingot_agapite,	30,	 7,		20.0
+BlacksmithingMaterial_10 = Valorite,	84.0,	i_ingot_valorite,	35,	 8,		24.0
+BlacksmithingMaterial_11 = Mytheril,	90.0,	i_ingot_mytheril,	40,	 9,		28.0
+BlacksmithingMaterial_12 = Dark,		94.0,	i_ingot_dark,		45,	10,		32.0
+BlacksmithingMaterial_13 = Blackrock,	99.0,	i_ingot_blackrock,	55,	11,		36.0
+
+[DEFNAME GeneratorTailoringMaterials]
+TailoringMaterialAmount = 5
+TailoringMaterial_1 = Hides,	 0.0,	i_hides_cut,		 0,	0,	 0.0
+TailoringMaterial_2 = Spined,	54.0,	i_hides_cut_spined,	 5,	0,	15.3
+TailoringMaterial_3 = Horned,	70.0,	i_hides_cut_horned,	15, 0,	29.4
+TailoringMaterial_4 = Barbed,	84.0,	i_hides_cut_barbed,	25, 0,	45.6
+TailoringMaterial_5 = Breath,	99.5,	i_hides_cut_breath,	35, 0,	58.1
+
+[EOF]

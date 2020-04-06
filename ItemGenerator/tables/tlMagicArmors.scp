@@ -1,0 +1,15 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[DEFNAME GeneratorArmorListMorey]
+ArmorMagicAmount = 4
+ArmorMagic_1 = Defense,			1  	// +1
+ArmorMagic_2 = Guarding, 		3 	// +3
+ArmorMagic_3 = Fortification,	6 	// +6 
+ArmorMagic_4 = Invulnerability,	9	// +9
+
+[EOF]

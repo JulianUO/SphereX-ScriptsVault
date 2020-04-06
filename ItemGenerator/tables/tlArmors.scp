@@ -1,0 +1,127 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+// Armors to generate
+// Can remove or add to list
+[DEFNAME GeneratorArmorList]
+ArmorGeneration = "Bone,Leather,Studded,Ring,Chain,Plate,Shield"
+ArmorGenerationMagic = "Ring,Chain,Plate,Shield"
+ArmorGenerationBlacksmithing = "Ring,Chain,Plate,Shield"
+ArmorGenerationTailoring = "Leather,Studded"
+
+// Percent of TAG.Penalty.$skill is getting each layer
+// Sum up to 100 between all the pieces.
+[defname GeneratorArmorPercents]
+ArmorPlateLayer_4 = 25
+ArmorPlateLayer_6 = 15
+ArmorPlateLayer_7 = 10
+ArmorPlateLayer_10 = 5
+ArmorPlateLayer_13 = 30
+ArmorPlateLayer_19 = 15
+
+ArmorChainLayer_4 = 30
+ArmorChainLayer_6 = 20
+ArmorChainLayer_13 = 50
+
+ArmorRingLayer_4 = 30
+ArmorRingLayer_7 = 5
+ArmorRingLayer_13 = 50
+ArmorRingLayer_19 = 15
+
+// Armors lists and default values
+// Setting -1 for value, skillmake and resource will avoid setting that.
+// Name, ID, Defname, Armor, Weight, Value, Skillmake, Resource, ReqStr, HitPoints, DupeList
+[DEFNAME GeneratorArmorTables]
+ArmorBoneAmount = 5
+ArmorBoneType = t_armor_leather
+ArmorBoneSkillmake = Tailoring
+ArmorBone_1	= bone arms,		0144e, i_bone_arms,		14, 2.0, 1, -1, -1, 40, {25 30}, 01453
+ArmorBone_2 = bone armor,		0144f, i_bone_chest,	14, 6.0, 1, -1, -1, 40, {25 30}, 01454
+ArmorBone_3 = bone gloves,		01450, i_bone_gloves,	14, 2.0, 1, -1, -1, 40, {25 30}, 01455
+ArmorBone_4 = bone helmet,		01451, i_bone_helmet,	14, 3.0, 1, -1, -1, 40, {25 30}, 01456
+ArmorBone_5 = bone leggings,	01452, i_bone_leggings,	14, 3.0, 1, -1, -1, 40, {25 30}, 01457
+
+ArmorLeatherAmount = 10
+ArmorLeatherType = t_armor_leather
+ArmorLeatherResourceID = i_hides_cut
+ArmorLeatherSkillmake = Tailoring
+ArmorLeather_1  = leather cap,		01db9, i_leather_cap,	  	13, 2.0, -1,  6.2,  2, 15, {30 40}, 01dba
+ArmorLeather_2  = leather chest,	01c06, i_leather_chest_f,	13, 1.0, -1, 62.2,  8, 15, {30 40}, 01c07, 1
+ArmorLeather_3  = leather sleeves,	013cd, i_leather_sleeves,	13, 2.0, -1, 53.9,  4, 15, {30 40}, 013c5
+ArmorLeather_4  = leather bustier,	01c0a, i_leather_bustier,	13, 1.0, -1, 58.0,  6, 15, {30 40}, 01c0b, 1
+ArmorLeather_5  = leather tunic,	013cc, i_leather_tunic,		13, 6.0, -1, 70.5, 12, 15, {30 40}, 013d3
+ArmorLeather_6  = leather gloves,	013c6, i_leather_gloves,	13, 1.0, -1, 51.8,  3, 10, {30 40}, 013ce
+ArmorLeather_7  = leather gorget,	013c7, i_leather_gorget,	13, 1.0, -1, 53.9,  4, 10, {30 40}, 0
+ArmorLeather_8  = leather leggings,	013cb, i_leather_leggings,	13, 4.0, -1, 66.3, 10, 10, {30 40}, 013d2
+ArmorLeather_9  = leather shorts,	01c00, i_leather_shorts,	13, 3.0, -1, 62.2,  8, 10, {30 40}, 01c01
+ArmorLeather_10 = leather skirt,	01c08, i_leather_skirt,		13, 1.0, -1, 58.0,  6, 10, {30 40}, 01c09, 1
+
+ArmorStuddedAmount = 7
+ArmorStuddedType = t_armor_leather
+ArmorStuddedResourceID = i_hides_cut
+ArmorStuddedSkillmake = Tailoring
+ArmorStudded_1 = studded chest,		01c02, i_studded_chest_f,	16, 6.0, -1, 87.1, 10, 35, {35 45}, 01c03, 1
+ArmorStudded_2 = studded sleeves,	013d4, i_studded_sleeves,	16, 4.0, -1, 87.1, 10, 35, {35 45}, 013dc
+ArmorStudded_3 = studded bustier,	01c0c, i_studded_bustier,	16, 1.0, -1, 82.9,  8, 35, {35 45}, 01c0d, 1
+ArmorStudded_4 = studded tunic,		013db, i_studded_tunic,		16, 8.0, -1, 95.4, 14, 35, {35 45}, 013e2
+ArmorStudded_5 = studded gloves,	013d5, i_studded_gloves,	16, 1.0, -1, 82.9,  8, 25, {35 45}, 013dd
+ArmorStudded_6 = studded gorget,	013d6, i_studded_gorget,	16, 1.0, -1, 78.7,  6, 25, {35 45}, 0
+ArmorStudded_7 = studded leggings,	013da, i_studded_leggings,	16, 5.0, -1, 91.2, 12, 35, {35 45}, 013e1
+
+ArmorRingAmount = 4
+ArmorRingType = t_armor_ring
+ArmorRingResourceID = i_ingot_iron
+ArmorRingSkillmake = Blacksmithing
+ArmorRing_1 = ringmail gloves,		013eb, i_ringmail_gloves,	 20,  2.0, -1, 12.0, 10, 20, {40 50}, 013f2
+ArmorRing_2 = ringmail tunic,		013ec, i_ringmail_tunic,	 20, 15.0, -1, 21.9, 18, 20, {40 50}, 013ed
+ArmorRing_3 = ringmail sleeves,		013ee, i_ringmail_sleeves,	 20, 15.0, -1, 16.9, 14, 20, {40 50}, 013ef
+ArmorRing_4 = ringmail leggings,	013f0, i_ringmail_leggings,	 20, 15.0, -1, 19.4, 16, 20, {40 50}, 013f1
+
+ArmorChainAmount = 3
+ArmorChainType = t_armor_chain
+ArmorChainResourceID = i_ingot_iron
+ArmorChainSkillmake = Blacksmithing
+ArmorChainPenaltyMagery = 0
+ArmorChainPenaltyStealth = 0
+ArmorChain_1 = chainmail coif,		013bb, i_chainmail_coif,	 23, 1.0, -1, 14.5, 10, 20, {35 60}, 013c0
+ArmorChain_2 = chainmail leggings,	013be, i_chainmail_leggings, 23, 7.0, -1, 36.8, 18, 40, {45 60}, 013c3
+ArmorChain_3 = chainmail tunic,		013bf, i_chainmail_tunic,	 23, 7.0, -1, 39.1, 20, 20, {45 60}, 013c4
+
+ArmorPlateAmount = 11
+ArmorPlateType = t_armor
+ArmorPlateResourceID = i_ingot_iron
+ArmorPlateSkillmake = Blacksmithing
+ArmorPlatePenaltyMagery = 0
+ArmorPlatePenaltyStealth = 0
+ArmorPlate_1  = platemail gorget,	01413, i_platemail_gorget,	 30, 10.0, -1, 56.4, 10, 30, {50 60}, 0
+ArmorPlate_2  = platemail gloves,	01414, i_platemail_gloves,	 30, 13.0, -1, 58.9, 12, 30, {50 60}, 01418
+ArmorPlate_3  = platemail arms,		01410, i_platemail_arms,	 30, 15.0, -1, 66.3, 18, 40, {50 60}, 01417  
+ArmorPlate_4  = platemail leggings,	01411, i_platemail_leggings, 30, 20.0, -1, 68.8, 20, 60, {50 60}, 0141a
+ArmorPlate_5  = platemail,			01415, i_platemail_chest,	 30, 25.0, -1, 75.0, 25, 60, {50 60}, 01416
+ArmorPlate_6  = platemail armor,	01c04, i_platemail_chest_f,	 30, 25.0, -1, 44.1, 20, 45, {50 60}, 01c05, 1
+ArmorPlate_7  = platemail helm,		01412, i_platemail_helm,	 30, 17.0, -1, 62.6, 15, 40, {50 60}, 01419
+ArmorPlate_8  = helmet,				0140a, i_helm_open,	  	 	 30, 17.0, -1, 37.9, 15, 40, {50 60}, 0140b
+ArmorPlate_9  = norse helm,			0140e, i_helm_norse,		 30, 17.0, -1, 37.9, 15, 40, {50 60}, 0140f
+ArmorPlate_10 = close helmet,		01408, i_helm_closed,		 30, 17.0, -1, 37.9, 15, 40, {50 60}, 01409
+ArmorPlate_11 = bascinet,			0140c, i_bascinet,	 	 	 18, 17.0, -1,  8.3, 15, 40, {50 60}, 0140d
+
+ArmorShieldAmount = 7
+ArmorShieldType = t_shield
+ArmorShieldResourceID = i_ingot_iron
+ArmorShieldSkillmake = Blacksmithing
+ArmorShield_1 = bronze shield,		01b72, i_shield_round_bronze, 10,  6.0, -1, 20.0, 12, 35, {85 100}, 0
+ArmorShield_2 = buckler,			01b73, i_shield_buckler,	   7,  5.0, -1, 15.0, 10, 20, {85 100}, 0
+ArmorShield_3 = tear kite shield,	01b78, i_shield_kite_wood,	  12, 8.0,  36, 22.0,  7, 20, {85 100}, 01b79
+ArmorShield_4 = kite shield,		01b74, i_shield_kite_metal,	  14, 8.0,  64, 22.6, 16, 45, {85 100}, 01b75
+ArmorShield_5 = metal shield,		01b7b, i_shield_round_metal,  11, 6.0,  56, 26.0, 14, 45, {85 100}, 0
+ArmorShield_6 = heater shield,		01b76, i_shield_heater,		  23, 9.0,  72, 34.3, 18, 45, {85 100}, 01b77
+ArmorShield_7 = wooden shield,		01b7a, i_shield_wood,		  5,  5.0,  -1,   -1, -1, 20, {85 100}, 0
+
+ArmorShield_7_Resources = "10 i_board, 2 i_ingot_iron"
+ArmorShield_7_Skillmake = "Carpentry 52.6"
+
+[EOF]

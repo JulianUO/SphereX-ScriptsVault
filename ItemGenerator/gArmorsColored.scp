@@ -1,0 +1,90 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[FUNCTION f_SphereGenerateArmorsColored]
+serv.log @SArmorGenerator :: Starting colored armor generation.
+for 0 <eval <f_Resources <def.ArmorColoredGeneration>> - 1>
+	local.skill = <f_GetARGV <local._for> <def.ArmorColoredGeneration>>
+	for m 2 <def.<local.skill>MaterialAmount>
+		args = <def.<local.skill>Material_<dlocal.m>>
+		local.tofile = "generador/items/Armor/Colored/iac<argv[0]>.scp"
+		serv.log @SArmorGenerator :: Generating colored armor (<argv[0]>)
+		if <file.fileexist <local.tofile>>
+			file.deletefile <local.tofile>
+		endif
+		if <file.open <local.tofile>>
+			for y 0 <eval <f_Resources <def.ArmorGeneration<local.skill>>> - 1>
+				local.artype = <f_GetARGV <local.y> <def.ArmorGeneration<local.skill>>>
+				call f_SphereGenerateArmorsColored_Core
+			endfor
+		file.close
+		endif
+	endfor
+endfor
+serv.log @SArmorGenerator :: Generation finished.
+
+[FUNCTION f_SphereGenerateArmorsColored_Core]
+for pl 1 <def.Armor<local.artype>Amount>
+	if ((strmatch(*shield*,<local.artype>)) && (<local.pl> == 7))
+		continue
+	else
+		args = <def.<local.skill>Material_<dlocal.m>>
+		serv.newitem <f_GetARGV 2 <def.Armor<local.artype>_<dlocal.pl>>>
+		file.writeline "[ITEMDEF <new.defname>_<strtolower <argv[0]>>]"
+		file.writeline "ID=<new.defname>"
+		file.writeline "NAME=<strtolower <argv[0]>> <f_GetARGV 0 <def.Armor<local.artype>_<dlocal.pl>>>"
+		if (strmatch(*shield*,<local.artype>))
+			file.writeline "ARMOR=<eval (<new.armor.high> + <argv[4]>)>"
+		else
+			file.writeline "ARMOR=<eval (<new.armor.high> + <argv[3]>)>"
+		endif
+		file.writeline "REQSTR=<new.reqstr>"
+		file.writeline "WEIGHT=<fval <new.weight>>"
+		args = <serv.itemdef.<new.baseid>.resources>
+			if <serv.itemdef.<new.baseid>.resources.1.key> == <def.Armor<local.artype>ResourceID>
+			local.resources = "<eval <serv.itemdef.<new.baseid>.resources.1.val>> <f_GetARGV 2 <def.<local.skill>Material_<dlocal.m>>>"
+				if <argv> > 1
+					for j 1 <eval <argv>-1>
+					local.resources .= ", <argv[<local.j>]>"
+					endfor
+				endif
+			else
+			local.resources = <argv[0]>
+				if <argv> > 1
+					for j 1 <eval <argv>-1>
+						if <serv.itemdef.<new.baseid>.resources.<dlocal.j>.key> == <def.Armor<local.artype>ResourceID>
+						local.resources .= ", <serv.itemdef.<new.baseid>.resources.<dlocal.j>.val> <f_GetARGV 2 <def.<local.skill>Material_<dlocal.m>>>"
+						else
+						local.resources = ", <serv.itemdef.<new.baseid>.resources.<dlocal.j>.val> <strtrim <serv.itemdef.<new.baseid>.resources.<dlocal.j>.key>>"
+						endif
+					endfor
+				endif
+			endif
+		file.writeline "RESOURCES=<local.resources>"
+		file.writeline "SKILLMAKE=<serv.skill.<serv.itemdef.<new.baseid>.skillmake.1.key>.key> <fval <serv.itemdef.<new.baseid>.skillmake.1.val> + <f_GetARGV 5 <def.<local.skill>Material_<dlocal.m>>>>"
+		// #FIXME# Include penalty magery & stealth
+		args = <def.<local.skill>Material_<dlocal.m>>
+		file.writeline "CATEGORY=Provisions - Armor Colored"
+		file.writeline "SUBSECTION=<local.artype> <f_GetARGV 0 <def.<local.skill>Material_<dlocal.m>>>"
+		file.writeline "DESCRIPTION=<strtolower <argv[0]>> <f_GetARGV 0 <def.Armor<local.artype>_<dlocal.pl>>>"
+		file.writeline " "
+		file.writeline "ON=@Create"
+		file.writeline "HITPOINTS={36 48}"
+		file.writeline "COLOR=color_o_<strtolower <f_GetARGV 0 <def.<local.skill>Material_<dlocal.m>>>>"
+		file.writeline " "
+		new.remove
+	endif
+endfor
+
+// if !<isempty <def.armor_flizz_<local.artype>_<getargv 0 <def.<local.skill>_material_<dlocal.m>>>>>
+// file.writeline "TAG.Penalty.Magery=<eval (<def.armor_<local.artype>_<new.layer>_percent> * <def.armor_flizz_<local.artype>_<getargv 0 <def.<local.skill>_material_<dlocal.m>>>>) / 100>"
+// endif
+// if !<isempty <def.armor_stealth_<local.artype>_<getargv 0 <def.<local.skill>_material_<dlocal.m>>>>>
+// file.writeline "TAG.Penalty.Stealth=<eval (<def.armor_<local.artype>_<new.layer>_percent> * <def.armor_stealth_<local.artype>_<getargv 0 <def.<local.skill>_material_<dlocal.m>>>>) / 100>"
+// endif
+
+[EOF]

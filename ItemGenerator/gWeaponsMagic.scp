@@ -1,0 +1,42 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[FUNCTION f_SphereGenerateWeaponsMagic]
+serv.log @SWeaponGenerator :: Starting (magic) generation.
+for 0 <eval <f_Resources <def.WeaponGenerationMagic>> - 1>
+	local.weaptype = <f_GetARGV <local._for> <def.WeaponGenerationMagic>>
+	local.topen = "generador/Items/Weapon/Magic/iwm<local.weaptype>.scp"
+	if <file.fileexist <local.topen>>
+		file.deletefile <local.topen>
+	endif
+	if !<file.open <local.topen>>
+		serv.log @SWeaponGenerator :: Unable to generate magic weapons (<local.weaptype>)
+	else
+		serv.log @SWeaponGenerator :: Generating magical weapons (<local.weaptype>)
+		for m 1 <def.WeaponMagicAmount>
+			for w 1 <def.Weapon<local.weaptype>Amount>
+				args = <def.Weapon<local.weaptype>_<dlocal.w>>
+				file.writeline "[ITEMDEF <argv[2]>_<strtolower <f_GetARGV 0 <def.WeaponMagic_<dlocal.m>>>>]"
+				file.writeline "ID=<argv[2]>"
+				file.writeline "NAME=<argv[0]>"
+				file.writeline "CATEGORY=Provisions - Weapons Magic"
+				file.writeline "SUBSECTION=<local.weaptype>"
+				file.writeline "DESCRIPTION=<argv[0]> of <f_GetARGV 0 <def.WeaponMagic_<dlocal.m>>>"
+				file.writeline " "
+				file.writeline "ON=@Create"
+				file.writeline "HITPOINTS=<argv[9]>"
+				file.writeline "EVENTS=t_enhanced_item"
+				file.writeline "INCREASEDAM=<f_GetARGV 1 <def.WeaponMagic_<dlocal.m>>>"
+				file.writeline " "
+			endfor
+		endfor
+	file.close
+	endif
+endfor
+serv.log @SWeaponGenerator :: Finished (magic) generation.
+
+[EOF]
