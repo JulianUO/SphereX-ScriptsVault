@@ -1,0 +1,60 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[PLEVEL 7]
+fSetupMoongates
+
+[ITEMDEF i_moongate_world]
+ID=i_moongate_blue
+TYPE=t_telepad
+CATEGORY=Animations
+SUBSECTION=Moongates
+DESCRIPTION=Blue Moongate (NO USE)
+
+// Remove all the existing moongates
+// Create new ones with the correct coordinates
+[FUNCTION fSetupMoongates]
+forinstances i_moongate_world
+remove
+endfor
+forinstances i_moongate
+remove
+endfor
+serv.newitem i_moongate_world // Britain
+new.p 1336,1997,5
+new.morep = 1499,3771,5
+new.attr = attr_static
+serv.newitem i_moongate_world // Jhelom
+new.p 1499,3771,5
+new.morep = 771,752,5
+new.attr = attr_static
+serv.newitem i_moongate_world // Yew
+new.p 771,752,5
+new.morep = 2701,692,5
+new.attr = attr_static
+serv.newitem i_moongate_world // Minoc
+new.p 2701,692,5
+new.morep = 1828,2948,-20
+new.attr = attr_static
+serv.newitem i_moongate_world // Trinsic
+new.p 1828,2948,-20
+new.morep = 643,2067,5
+new.attr = attr_static
+serv.newitem i_moongate_world // Skara Brae
+new.p 643,2067,5
+new.morep = 3563,2139,34
+new.attr = attr_static
+serv.newitem i_moongate_world // Magincia
+new.p 3563,2139,34
+new.morep = 4467,1283,5
+new.attr = attr_static
+serv.newitem i_moongate_world // Moonglow
+new.p 4467,1283,5
+new.morep = 1336,1997,5
+new.attr = attr_static
+
+[EOF]
