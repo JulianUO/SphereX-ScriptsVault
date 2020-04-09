@@ -1,0 +1,120 @@
+﻿// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+// Cierra y abre determinado dialog
+// f_resenddialog <dialog name>
+[function f_ResendDialog]
+src.dialogclose <argv[0]>
+sdialog <args>
+
+// Repite animacion por determinado tiempo
+// f_loopanim <anim>,<veces>,<delay>
+[function f_LoopAnim]
+if <argv[1]> > 1
+	for <eval (<argv[1]> - 1)>
+	timerf <eval (<local._for> * <argv[2]>)>,anim <eval <argv[0]>>
+	endfor
+endif
+anim <argv[0]>
+
+// Repite sonido por determinado tiempo
+// f_loopsound <sound>,<veces>,<delay>
+[function f_LoopSound]
+if <argv[1]> > 1
+	for <eval (<argv[1]> - 1)>
+	timerf <eval (<local._for> * <argv[2]>)>,sound <eval <argv[0]>>
+	endfor
+endif
+sound <argv[0]>
+
+// Returns the arguments in days/hours/etc format
+// Instead of only seconds value
+[function f_Time]
+if (<args> > 86400)
+return <eval <args>/86400> dias, <eval (<args>%86400)/3600> hrs, <eval ((<args>%86400)%3600)/60> min, <eval ((<args>%86400)%3600)%60> sec
+elif (<args> > 3600)
+return <eval <args>/3600> hrs, <eval (<args>%3600)/60> min, <eval (<args>%3600)%60> sec
+elif (<args> > 60)
+return <eval <args>/60> min, <eval <args>%60> sec
+else
+return <args> sec
+endif
+
+// Devuelve la cantidad de argumentos que tiene args
+// f_resources <args>
+[function f_Resources]
+return <argv>
+
+// Devuelve el argumento # de los args ingresados
+// getargv # <args>
+[FUNCTION f_GetARGV]
+local.toret = <strarg <args>>
+args = <streat <args>>
+return <argv[<local.toret>]>
+
+// Devuelve el maximo de dos valores
+// max <valor1>,<valor2>
+[function Max]
+return <qval <argn2> < <argn1>? <argn1> : <argn2>>
+
+// Devuelve el minimo de dos valores
+// min <valor1>,<valor2>
+[function Min]
+return <qval <argn2> < <argn1>? <argn2> : <argn1>>
+
+// Mover este char un tile para atras
+// No se de donde salio pero funciona.
+[FUNCTION MoveBack]
+doswitch <dir>
+	begin
+		if (<canmove s>)
+			move s
+		endif
+	end
+	begin
+		if (<canmove sw>)
+			move sw
+		endif
+	end
+	begin
+		if (<canmove w>)
+			move w
+		endif
+	end
+	begin
+		if (<canmove nw>)
+			move nw
+		endif
+	end
+	begin
+		if (<canmove n>)
+			move n
+		endif
+	end
+	begin
+		if (<canmove ne>)
+			move ne
+		endif
+	end
+	begin
+		if (<canmove e>)
+			move e
+		endif
+	end
+	begin
+		if (<canmove se>)
+			move se
+		endif
+	end
+	begin
+		if (<canmove s>)
+			move s
+		endif
+	end
+enddo
+
+[EOF]

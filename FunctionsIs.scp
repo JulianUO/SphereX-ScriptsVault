@@ -1,0 +1,117 @@
+//****************************************************************************
+// SPHERE by : Menasoft ©1997-2017
+// www.sphereserver.net
+// All SPHERE script files and formats are copyright Menasoft & Partners.
+// This file may be freely edited for personal use, but may not be distributed
+// in whole or in part, in any format without express written permission from
+// Menasoft & Partners.  All donations and contributions
+// become the property of Menasoft & Partners.
+//****************************************************************************
+// FILE LAST UPDATED: Thursday, Jun 8, 2017
+VERSION=X1
+
+[FUNCTION f_isHuman]
+if ((<body>==c_man) || (<body>==c_woman) || (<body>==c_ghost_man) || (<body>==c_ghost_woman) || (<body>==c_man_gm))
+return 1
+endif
+return 0
+
+[FUNCTION f_isHumanNPC]
+if ((<dispid>==c_man) || (<dispid>==c_woman))
+return 1
+endif
+return 0
+
+[FUNCTION f_isElf]
+if ((<body>==c_elf_male) || (<body>==c_elf_female) || (<body>==c_elf_ghost_man) || (<body>==c_elf_ghost_woman))
+return 1
+endif
+return 0
+
+[FUNCTION f_isGarg]
+if ((<body>==c_gargoyle_male) || (<body>==c_gargoyle_female) || (<body>==c_garg_ghost_man) || (<body>==c_garg_ghost_woman))
+return 1
+endif
+return 0
+
+[FUNCTION f_isFemale]
+if (<serv.chardef.<obody>.can>&mt_female)
+return 1
+endif
+return 0
+
+[FUNCTION f_isCursed]
+forcharlayer 32
+   if (<baseid> == i_rune_curse)
+      return 1
+   endif
+endfor
+return 0
+
+[FUNCTION f_isPlayableChar]
+if <f_IsHuman> || <f_IsElf> || <f_IsGarg>
+return 1
+endif
+return 0
+
+[FUNCTION f_isUndead]
+if (<isevent.e_undead>) || (<istevent.e_undead>) // || (<npc>==brain_undead)
+return 1
+endif
+return 0
+
+// Check if <args> dialog is open for this player
+[function f_isDialogOpen]
+for 0 <eval <dialoglist.count> - 1>
+	if strmatch("<dialoglist.<dlocal._for>.id>","<args>")
+	return 1
+	endif
+endfor
+return 0
+
+// Check if this person see <args> as criminal
+// f_iscriminal <uid>
+[function f_isCriminal]
+if <args> != <uid>
+ref4 = <args>
+	// Es un pet, chequeo el dueño.
+	if <ref4.npc>
+		if <ref4.owner> == <uid>
+			return 0
+		endif
+	return <f_isCriminal <ref4.owner>>
+	endif
+	// Estamos en guild. FIXME: Aplicar sancion.
+	if <ref4.guild> && <guild>
+		if <ref4.guild> == <guild>
+			return 0
+		endif
+		if <ref4.guild.align> == <guild.align>
+			return 0
+		endif
+		if <ref4.guild.align> == 0
+			return 0
+		endif
+	serv.log @GuildLogs :: <name> (<uid>) realizo accion buena en faccionado enemigo <ref4.name> (<ref4.uid>)
+	return 1
+	endif
+	if (<ref4.flags>&statf_criminal) || (<ref4.kills> >= 5) || (<ref60.karma> <= -3000)
+		return 1
+	endif
+endif
+return 0
+
+
+// Check if this item is in a trade window.
+// Ideal for using with @(Item)DropOn_Item trigger
+[function f_isInTrade]
+ref1 = <cont.uid>
+while <ref1.isitem>
+	if <ref1.type> == t_eq_trade_window
+	return 1
+	endif
+ref1 = <qval <uid.<ref1.cont>.isitem> ? <ref1.cont>:<src>>
+endfor
+return 0
+
+[EOF]

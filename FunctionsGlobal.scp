@@ -1,0 +1,42 @@
+//****************************************************************************
+// SphereServer by: SphereServer development team and Menasoft.
+// www.sphereserver.net
+//****************************************************************************
+VERSION=X1
+
+[PLEVEL 7]
+fWorldCleaning
+fRemoveAll
+fWorldRespawn
+
+// Clear all the empty or bugged worldgem bits.
+[function fWorldCleaning]
+local.gems = 0
+forinstances i_worldgem_bit
+	if <more1> <= 0
+		local.gems ++
+		remove
+	endif
+endfor
+serv.log @WorldCleaning :: Se eliminaron <dlocal.gems> spawns erroneos.
+
+// Remove every instance of the argument ID.
+[function fRemoveAll]
+local.items = 0
+forinstances <args>
+	local.items ++
+	remove
+endfor
+serv.log @WorldCleaning :: Se eliminaron <dlocal.items> <args>
+
+// Respawn the entire world
+[function fWorldRespawn]
+forinstances i_worldgem_bit
+	if <type> == t_spawn_char
+	reset
+	timer 1
+	timerf 2,timer 1
+	endif
+endfor
+
+[eof]
