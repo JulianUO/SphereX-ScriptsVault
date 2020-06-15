@@ -1,0 +1,92 @@
+﻿// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+
+// Set the properties for the item
+// This function prevents more than the specific amount
+// And of course, prevents to set two props from the same group.
+[FUNCTION f_GenerateProps]
+if <type> != t_talisman
+	events +t_enhanced_item
+endif
+local.ItemType = <argv[0]>
+local.LuckProps = <argv[1]>
+local.Chance = <argv[2]>
+if <layer> == layer_helm
+	if <r10> == 1
+		nightsight = 1
+	endif
+endif
+while (<local.LuckProps> > 0)
+	local.GetProp = <r1,<def.ItemProp<local.ItemType>Amount>>
+	local.Flag = <f_GetARGV 0 <def.ItemProp<local.ItemType>_<dlocal.GetProp>>>
+	if (<local.UsedProps>&<local.Flag>)
+		continue
+	endif
+	args = <def.ItemProp<local.ItemType>_<dlocal.GetProp>>
+	if (<argv[3]> != 0)
+		uid.<uid>.<argv[1]> = <r<argv[2]>,<argv[3]>>
+	else
+		uid.<uid>.<argv[1]>
+	endif
+	local.UsedProps |= <argv[0]>
+	local.LuckProps -= 1
+enddo
+tag.Faction
+return 0
+
+
+// Slayer type for this weapon
+// We temp store it on TAG.Faction
+[FUNCTION SetSlayer]
+Slayer = <tag0.Faction>
+tag.Faction
+
+// Special Move number setting
+// This actually doesn't care on the event
+// Is just for the displaying name.
+[FUNCTION SetHitSpecial]
+if <skill> == archery
+	tag.HitSpecialMove = 7
+	return 0
+else
+	if <skill> == swordsmanship
+		tag.HitSpecialMove = 1
+	elif <skill> == macefighting
+		tag.HitSpecialMove = 3
+	elif <skill> == fencing
+		tag.HitSpecialMove = 5
+	endif
+endif
+if <TwoHands>
+	tag.HitSpecialMove += 1
+endif
+
+// Generate the skill bonus between every existing skill
+// Can be modified to generate a specific group.
+[FUNCTION SetSkillBonus]
+tag0.SkillMod = <r1,48>
+tag0.SkillMod<dtag0.SkillMod> = <args>
+
+[FUNCTION f_Slayer_GetWeapon]
+if <weapon> != 0
+	if <weapon.slayer> != 0
+		return <weapon.slayer>
+	endif
+endif
+
+[FUNCTION f_Slayer_GetTalisman]
+if <findlayer.layer_talisman>
+	if <uid.<findlayer.layer_talisman.uid>.slayer> != 0
+		return <uid.<findlayer.layer_talisman.uid>.slayer>
+	endif
+endif
+
+[FUNCTION f_Slayer_GetName]
+return <def.faction_<hval <args>>>
+
+[EOF]

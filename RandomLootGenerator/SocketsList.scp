@@ -1,0 +1,64 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+
+[DEFNAME defSocketsWeapon]
+ItemPropWeaponAmount = "4"
+ItemPropWeapon_1		01,	SetSlayer
+ItemPropWeapon_2		01, IncreaseDam,		1,9
+ItemPropWeapon_3		02,	IncreaseHitChance,	1,15
+ItemPropWeapon_4		04,	SetHitSpecial
+
+[DEFNAME defSocketsSpellbook]
+ItemPropSpellbookAmount = "3"
+ItemPropSpellbook_1		01,	SetSlayer
+ItemPropSpellbook_2		02,	IncreaseSpellDam,	1,9
+ItemPropSpellbook_3		04,	CastingFocus,		1,15
+
+[DEFNAME defSocketsArmor]
+ItemPropArmorAmount = "4"
+ItemPropArmor_1			01,	ModAR,				1,9
+ItemPropArmor_2			02,	IncreaseDefChance,	1,3
+ItemPropArmor_3			02,	BonusHitsMax,		1,15
+ItemPropArmor_4			04,	Luck,				1,100
+
+[DEFNAME defSocketsShield]
+ItemPropShieldAmount = "4"
+ItemPropShield_1		01,	ModAR,				1,7
+ItemPropShield_2		02,	IncreaseParryChance,1,10
+ItemPropShield_3		02,	IncreaseDefChance,	1,5
+ItemPropShield_4		04,	BonusHitsMax,		1,15
+ItemPropShield_5		08,	Luck,				1,120
+
+[DEFNAME defSocketsTalisman]
+ItemPropTalismanAmount = "7"
+ItemPropTalisman_1		01,	IncreaseBardChance,1,5
+ItemPropTalisman_2		01,	IncreaseHitChance,1,10
+ItemPropTalisman_3		01,	IncreaseDefChance,1,3
+ItemPropTalisman_4		02, IncreaseGold,1,15
+ItemPropTalisman_5		02, Luck,1,200
+ItemPropTalisman_6		04, SetSkillBonus,1,120
+ItemPropTalisman_7		04,	SetSlayer,0,0
+
+ItemPropInstrumentAmount = "2"
+ItemPropInstrument_1	01,	SetSlayer,0,0
+ItemPropInstrument_2	02,	TAG.IncreaseBardChance,1,10
+
+
+[DEFNAME defItemPropertiesList]
+ItemPropsAmount = 6
+ItemProps = Weapon,Spellbook,Armor,Shield,Talisman,Instrument
+Random_LuckLoot_Weapon			random_weapons
+Random_LuckLoot_Spellbook		i_spellbook
+Random_LuckLoot_Armor			random_armor
+Random_LuckLoot_Shield			random_shields
+Random_LuckLoot_Talisman		random_talisman
+Random_LuckLoot_Instrument		random_instrument_human
+Random_LuckLoot_Jewelry			random_jewelry
+
+
+[EOF]
