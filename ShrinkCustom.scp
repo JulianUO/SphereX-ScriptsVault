@@ -1,0 +1,59 @@
+[DEFNAME defStablesSettings]
+// Type of storage used
+// 0 = per char. 1 = per account.
+UOAStableStorage = 0
+
+// Stable limit of chars stabled.
+// Try to set it on a low value.
+UOAStableLimit = 30	
+
+
+// Custom Shrink
+[function f_Shrink]
+Shrink 
+ref3 = <hval <actarg1>&~030000000>
+ref3.cont = <src.findlayer.layer_pack>
+ref3.attr = 040a4
+if <serv.list.<qval <def.UOAStableStorage> ? <src.account>:<src.uid>>_stabled.count> >= 0
+	if (<serv.list.<qval <def.UOAStableStorage> ? <src.account>:<src.uid>>_stabled.findelem <ref3>> == -1)
+		serv.list.<qval <def.UOAStableStorage> ? <src.account>:<src.uid>>_stabled.add <ref3>
+		return <ref3.uid>
+	endif
+else
+	serv.list.<qval <def.UOAStableStorage> ? <src.account>:<src.uid>>_stabled.add <ref3>
+	return <ref3.uid>
+endif
+
+
+// Function to Shrink current mount and hold it in a tag.
+// Used when entering specific dungeons or boats
+[FUNCTION MountShrink]
+if <findlayer.layer_horse> != 0
+	tag0.TempHorse = <uid.<findlayer.layer_horse.more2>.f_Shrink>
+	return <tag0.TempHorse>
+endif
+
+// Restoring our mount from TempHorse tag.
+// Used when exiting specific regions or boats. 
+[FUNCTION MountRestore]
+if <tag0.TempHorse> != 0
+	ref2 = <tag0.TempHorse>
+	//ref2.attr = 04020
+	ref2.cont = <findlayer.layer_pack.uid>
+	UseItem <ref2.uid>
+	tag.TempHorse
+	if (<serv.list.<qval <def.UOAStableStorage> ? <account>:<uid>>_stabled.count> < 2)
+		serv.list.<qval <def.UOAStableStorage> ? <account>:<uid>>_stabled.clear
+	else
+		local.ElemNum = <serv.list.<uid>_stabled.findelem <tag0.TempHorse>>
+		serv.list.<qval <def.UOAStableStorage> ? <account>:<uid>>_stabled.<local.ElemNum>.remove
+	endif
+	local.me = <uid>
+	forchars 0
+		if <npc>
+			if <owner> == <src.uid>
+				src.mount <uid>
+			endif
+		endif
+	endfor
+endif
