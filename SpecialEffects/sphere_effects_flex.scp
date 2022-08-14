@@ -1,0 +1,87 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+// EffectFlex
+// ARGS: type, id, speed, frames, explode, hue, fixdir, render, srcx, srcy, srcz, targetx, targety, targetz
+[FUNCTION EffectFlex]
+forclients 20
+    sendpacket 0c0 <argv[0]> d0 d0 w<argv[1]> w<eval <argv[8]>> w<eval <argv[9]>> b<eval <argv[10]>> w<eval <argv[11]>> w<eval <argv[12]>> b<eval <argv[13]>> <argv[2]> <argv[3]> w0 <argv[6]> <argv[4]> d<argv[5]> d<argv[7]>
+endfor
+
+
+[FUNCTION albtraum]
+FORCHARS 10
+    IF (<id>==c_albtraum)
+        anim 6
+        sound 163
+        sound 164
+        FOR 8
+            flexeffect 0,{ 0122b 1 01645 1 0122e 1 0122d 1 0122c 1 },0,0,0,{089f 08a4},0,0,<eval <p.x>+1>,<p.y>,<eval <p.z>+5>,<eval <p.x>+5>,<eval <p.y>+{-1 2}>,<eval <p.z>>
+        ENDFOR
+        FOR 4
+            flexeffect 0,{ 01b1a 1 01b1b 1 01b1c 1 01b19 1 01b14 1 01b13 1 01b11 1 01b12 1 },0,0,0,0,0,0,<eval <p.x>+1>,<p.y>,<eval <p.z>+5>,<eval <p.x>+5>,<eval <p.y>+{-1 2}>,<eval <p.z>>
+        ENDFOR
+    Endif
+ENDFOR
+FOR 20
+    newitem={ 0122b 1 01645 1 0122e 1 0122d 1 0122c 1 }
+    new.timerf 1 color={089f 08a4}
+    new.timerf 1 name=Kotze
+    new.timerf 1 p=<p>
+    new.timerf 1 move <eval {1 5}>,<eval {-2 2}>
+    new.timerf 1 timerd={40 80}
+    new.timerf 1 attr=012
+ENDFOR
+FOR 5
+    newitem={ 01b1a 1 01b1b 1 01b1c 1 01b19 1 01b14 1 01b13 1 01b11 1 01b12 1 }
+    new.timerf 1 name=Ausgekotzte Knochen
+    new.timerf 1 p=<p>
+    new.timerf 1 move <eval {1 5}>,<eval {-2 2}>
+    new.timerf 1 timerd={40 80}
+    new.timerf 1 attr=012
+ENDFOR
+local.uid=<uid>
+local.x=<p.x>
+FORCHARS 5
+    IF (<p.x>><local.x>)
+        newitem=i_splatter
+        new.timerd=<eval <distance <local.uid>>+1>
+        new.p=<p>
+        new.link=<uid>
+    Endif
+ENDFOR
+
+
+[ITEMDEF i_splatter]
+ID=i_gold
+NAME=Splatter
+TYPE=t_script
+
+ON=@Timer
+    link.splatter
+    remove
+    return 1
+
+[FUNCTION splatter]
+IF (<id>!=c_albtraum)
+    f_gethit 10
+    FORCHARS 1
+        f_gethit 8
+    ENDFOR
+    FORCHARS 2
+        f_gethit 2
+    ENDFOR
+    sound=281
+    FOR 20
+        flexeffect=0,{ 0122b 1 01645 1 0122e 1 0122d 1 0122c 1 },0,0,0,{089f 08a4},0,0,<p.x>,<p.y>,<eval <p.z>+2>,<eval <p.x>+{-2 3}>,<eval <p.y>+{-2 3}>,<eval <p.z>+10>
+        flexeffect=0,{ 0122b 1 01645 1 0122e 1 0122d 1 0122c 1 },5,0,0,{089f 08a4},0,0,<p.x>,<p.y>,<eval <p.z>+2>,<eval <p.x>+{-2 3}>,<eval <p.y>+{-2 3}>,<eval <p.z>+10>
+        flexeffect=0,{ 0122b 1 01645 1 0122e 1 0122d 1 0122c 1 },10,0,0,{089f 08a4},0,0,<p.x>,<p.y>,<eval <p.z>+2>,<eval <p.x>+{-2 3}>,<eval <p.y>+{-2 3}>,<eval <p.z>+10>
+    ENDFOR
+Endif
+
+
+[EOF]

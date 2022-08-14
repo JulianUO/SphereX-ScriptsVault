@@ -1,0 +1,58 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+// Ex. (fire rain with fire field afterwards)
+// local.AfterEffect = 03996,{3500 4500},15000
+// call MeteorFX 14,i_fx_fireball,9,16,1,colors_red,4,60
+
+// Usage:
+// AfterEffect = ID,Duration
+// call MeteorFX range,itemid,speed,loop,explode,color,render,amount
+[FUNCTION f_FireRain]
+local.AfterEffect = 03996,15000
+call MeteorFx 14,i_fx_fireball,9,16,1,colors_red,4,60
+
+
+[FUNCTION MeteorFX]
+newitem i_fxTimer
+equip <new.uid>
+new.tag.EffectID = Meteor
+new.tag.Distance = <min 100,<argv[7]>>
+new.tag.Range = <min 12,<argv[0]>>
+new.tag.effect = 0,<argv[1]>,<argv[2]>,<argv[3]>,<argv[4]>,<argv[5]>,<argv[6]>
+if <local.AfterEffect> != 0
+	new.tag.AfterEffect = <local.AfterEffect>
+endif
+new.timerms 1
+
+[FUNCTION f_fxMeteor]
+serv.newitem i_memory_meteorfx
+new.tag0.AfterEffect = <local.AfterEffect>
+new.movenear <uid>,<local.range>
+new.timerms 650
+EffectXYZ <eval <new.p.x>-4>,<eval <new.p.y>-7>,<eval <new.p.z> + 50>,<new.p.x>,<new.p.y>,<new.p.z>,<local.effect>
+
+[FUNCTION EffectXYZ]
+if <isonline>
+	SendPacket 0c0 <argv[6]> d0 d0 w<argv[7]> w<argv[0]> w<argv[1]> <argv[2]> w<argv[3]> w<argv[4]> <argv[5]> <argv[8]> <argv[9]> w0 0 <argv[10]> d<argv[11]> d<argv[12]>
+endif
+
+[ITEMDEF i_memory_meteorfx]
+ID=i_memory
+NAME=meteorfx
+
+ON=@Timer
+if !<isempty <tag.AfterEffect>>
+	newitem <f_GetARGV 0 <tag0.AfterEffect>>,<f_GetARGV 1 <tag0.AfterEffect>>
+	new.p = <p>
+	new.attr = attr_decay|attr_move_never
+	new.timerms = <f_GetARGV 2 <tag0.AfterEffect>>
+	remove
+	return 1
+endif
+	
+[EOF]

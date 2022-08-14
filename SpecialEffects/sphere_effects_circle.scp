@@ -1,0 +1,67 @@
+//****************************************************************************
+// SphereServer ©1997-2019
+// This script is part from the Sphere Community Script Pack.
+// You can download the full pack from: www.sphereserver.net
+//****************************************************************************
+VERSION=X1
+
+// CircleFX will create a circle effect around the char.
+// Distance limit is 16
+[FUNCTION f_FireCircle]
+local.AfterEffect = i_fire_column_dam,300
+call CircleFX 18,i_fx_explode,9,10,colors_red,4
+
+// Usage:
+// AfterEffect = ID,DamLo,DamHi
+// ARGS = distance,itemid,speed,loop,color,rendermode
+[FUNCTION CircleFX]
+newitem i_fxTimer
+equip <new.uid>
+new.tag.EffectID = Circle
+new.tag.distance = <min 16,<argv[0]>>
+new.tag.effect = 2,<argv[1]>,<argv[2]>,<argv[3]>,0,<argv[4]>,<argv[5]>
+if <local.AfterEffect> != 0
+	new.tag.AfterEffect = <local.AfterEffect>
+endif
+new.timerms 1
+
+[FUNCTION f_fxCircle]
+newitem i_memory
+ref1=<new>
+for dx -<argn> <argn>
+	for dy -<argn> <argn>
+		float.dist=<floatval sqrt(<eval (<local.dx>@2)+(<local.dy>@2)>)>
+		if (<float.dist> > <floatval <argn>-0.6>) && (<float.dist> < <floatval <argn>+0.6>)
+			local.absx=<eval <p.x>+<local.dx>>
+			local.absy=<eval <p.y>+<local.dy>>
+			ref1.p=<dlocal.absx>,<dlocal.absy>
+			ref1.fix
+			ref1.effect <local.effect>	
+			if <local.AfterEffect> != 0
+				newitem <f_GetARGV 0 <local.AfterEffect>>
+				new.link = <uid>
+				new.more1 = <r<f_GetARGV 1 <local.AfterEffect>>,<f_GetARGV 2 <local.AfterEffect>>>
+				new.attr = attr_decay|attr_move_never|attr_invis
+				new.p = <ref1.p>
+				new.timerms 2
+				new.fix
+			endif
+		endif
+	endfor
+endfor
+ref1.remove
+
+
+[ITEMDEF i_fire_column_dam]
+ID=i_fire_column
+NAME=Fire COlumn Damage
+
+ON=@Timer
+ref1 = <link.uid>
+forchars 0
+	if <ref1.uid> != <uid>
+		damage <more1> dam_magic <ref1.uid>
+	endif
+endfor
+
+[EOF]

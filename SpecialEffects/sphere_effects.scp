@@ -1,0 +1,37 @@
+//****************************************************************************
+// SphereServer ©1997-2019
+// This script is part from the Sphere Community Script Pack.
+// You can download the full pack from: www.sphereserver.net
+//****************************************************************************
+VERSION=X1
+
+// TAG.AfterEffect = ID,Duration,DamLo,DamHi
+
+// Base timer for the special effects
+// This will be set on the char
+[ITEMDEF i_fxTimer]
+ID=0122a
+NAME=fxtimer
+TYPE=t_eq_script
+LAYER=layer_special
+WEIGHT=0
+
+ON=@Timer
+if (<more1> < <tag0.distance>)
+	local.effect = <tag0.effect>
+	local.dir = <cont.dir>
+		if <tag0.range>
+			local.range = <tag0.range>
+		endif
+		if !<isempty <tag.AfterEffect>>
+			local.AfterEffect = <tag0.AfterEffect>
+		endif
+	call cont.f_fx<tag0.EffectID> <more1>
+	more1 ++
+	timerms <eval <f_GetARGV 3 <tag0.Effect>> * 10>
+	return 1
+endif
+remove
+return 1
+
+[EOF]

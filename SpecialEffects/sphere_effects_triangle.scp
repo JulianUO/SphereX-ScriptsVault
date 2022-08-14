@@ -1,0 +1,90 @@
+//****************************************************************************
+// SphereServer ©1997-2019
+// This script is part from the Sphere Community Script Pack.
+// You can download the full pack from: www.sphereserver.net
+//****************************************************************************
+VERSION=X1
+
+// TriangleFX will create a triangle effect.
+// Depending on the char's <dir> will be pointing differently.
+// ARGS = distance,itemid,speed,loop,color,rendermode
+// Distance limit is 16
+[FUNCTION TriangleFX]
+newitem i_fxTimer
+equip <new.uid>
+new.tag.EffectID = Triangle
+new.tag.distance = <min 16,<argv[0]>>
+new.tag.effect = 2,<argv[1]>,<argv[2]>,<argv[3]>,0,<argv[4]>,<argv[5]>
+new.timerms 100
+
+[FUNCTION f_fxTriangle]
+serv.newitem i_memory
+ref1=<new>
+call f_fxTriangle_GetCoords <args>,<local.dir>
+for dX -<local.val1> <local.val2>
+	for dY -<local.val3> <local.val4>
+		float.dist=<FLOATVAL SQRT(<EVAL (<LOCAL.dX>@2)+(<LOCAL.dY>@2)>)>
+		if (<float.dist> > <floatval <argv[0]>-0.5>) && (<float.dist> < <floatval <argv[0]>+0.5>)
+			local.absX=<EVAL <P.X>+<LOCAL.dX>>
+			local.absY=<EVAL <P.Y>+<LOCAL.dY>>
+			REF1.P=<dlocal.absX>,<dlocal.absY>
+			REF1.FIX
+			REF1.effect <local.effect>
+		endif
+	endfor
+endfor
+ref1.remove
+
+[FUNCTION f_fxTriangle_GetCoords]
+doswitch <argv[1]>
+	begin 
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <argv[0]>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <argv[0]>
+		local.val3 = <argv[0]>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <argv[0]>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <argv[0]>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <argv[0]>
+	end
+	begin
+		local.val1 = <eval <argv[0]> / 2>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <argv[0]>
+	end
+	begin
+		local.val1 = <argv[0]>
+		local.val2 = <eval <argv[0]> / 4>
+		local.val3 = <eval <argv[0]> / 4>
+		local.val4 = <argv[0]>
+	end
+	begin	
+		local.val1 = <argv[0]>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <eval <argv[0]> / 2>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+	begin
+		local.val1 = <argv[0]>
+		local.val2 = <eval <argv[0]> / 2>
+		local.val3 = <argv[0]>
+		local.val4 = <eval <argv[0]> / 2>
+	end
+enddo
+
+[EOF]
