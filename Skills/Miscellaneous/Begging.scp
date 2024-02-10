@@ -1,0 +1,127 @@
+﻿// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+
+[SKILL 6]
+DEFNAME=Skill_Begging
+KEY=Begging
+TITLE=Beggar
+FLAGS=SKF_SCRIPTED
+PROMPT_MSG=A quién quieres implorar piedad?
+DELAY=2.0
+STAT_STR=5
+STAT_DEX=25
+STAT_INT=55
+BONUS_STR=0
+BONUS_DEX=50
+BONUS_INT=50
+BONUS_STATS=10
+ADV_RATE=1.0,50.0,150.0
+
+ON=@Wait
+sysmessage <serv.skill.6.prompt_msg>
+targetf f_BeggingSkill
+f_SkillWait 0,Begging
+return 1
+
+
+[FUNCTION f_BeggingSkill]
+if !<argo>
+	sysmessage <def.begging_TargItem>
+	f_SkillWait 2,Begging
+	return 1
+endif
+if <argo.isitem>
+	sysmessage <def.begging_TargItem>
+	f_SkillWait 2,Begging
+	return 1
+endif
+if !<argo.npc>
+	sysmessage <def.begging_TargPlayer>
+	f_SkillWait 2,Begging
+	return 1
+endif
+if (<argo.npc> != brain_vendor)
+	sysmessage <def.begging_TargMonster>
+	f_SkillWait 2,Begging
+	return 1
+elseif <distance <argo.uid>> > 4
+	sysmessage <argo.sex <def.begging_TooFarM>/<def.begging_TooFarF>>
+	f_SkillWait 2,Begging
+	return 1
+elseif <argo.tag0.begged>
+	argo.say <def.begging_NoMoney>
+	f_SkillWait 2,Begging
+	return 1
+elseif <findlayer.layer_horse.uid>
+	sysmessage <def.begging_Mounted>
+	f_SkillWait 2,Begging
+	return 1
+endif
+face <argo.uid>
+f_LoopAnim 32,3,1
+timerf 1,say <f_Begging_Message>
+if <SkillUseQuick begging,<eval <argo.int> / 2>,0,1>
+	timerf 3,f_Begging_Success <argo.uid>
+else
+	timerf 3,f_Begging_Fail <argo.uid>
+endif
+return 1
+
+
+[FUNCTION f_Begging_Success]
+ref1 = <args>
+local.getgold = <qval <ref1.gold> < 10 ? 10 : <eval <ref1.gold> / 10>>
+local.max = <eval 10 + (<fame> / 2500)>
+if <local.max> > 14
+	local.max = 14
+elseif <local.max> < 10
+	local.max = 10
+endif
+if <local.getgold> > <local.max>
+	local.getgold = <local.max>
+endif
+ref1.consume <dlocal.getgold> i_gold
+ref1.tag0.begged ++
+ref1.timerf 90,tag.begged
+serv.newitem i_gold,<dlocal.getgold>,<uid>
+serv.newitem i_fruit_apple,2,<uid>
+ref1.say <def.begging_Success>
+f_SkillWait 1,Begging
+SkillGain Begging <eval (<begging> / 10) + 1>
+
+
+[FUNCTION f_Begging_Fail]
+uid.<args>.say <def.begging_Fail>
+SkillGain Begging <eval (<begging> / 70) + 1>
+f_SkillWait 2,Begging
+
+
+[FUNCTION f_Begging_Message]
+dorand 6
+	return "Me das algo de oro, amigo?"
+	return "Sólo unas monedas."
+	return "Seguro que puedes darme algo."
+	return "No como desde hace días."
+	return "Tengo que dar de comer a mis hijos."
+	return "Mis hijos necesitan vino!"
+enddo
+
+
+[DEFNAME defBeggingMessages]
+begging_Mounted			"Parece que no pueden darte dinero."					// 500404
+begging_NoMoney			"No tengo dinero para darte!" 							// 500407
+begging_TargItem		"No hay muchas posibilidades de sacar dinero de ahí!" 	// 500400
+begging_TargMonster		"No hay muchas posibilidades de sacar dinero de ahí!" 	// 500399
+begging_TargPlayer		"Tal vez preguntando te iría mejor." 					// 500398
+begging_TooFarF			"Estás demasiado lejos para pedirle a ella." 			// 500402
+begging_TooFarM			"Estás demasiado lejos para pedirle a él." 				// 500401
+begging_Success			"Me das lástima..."										// 500405
+begging_Fail			"No pareces de fiar... ¡hoy no te doy dinero!"			// 500406
+
+
+[EOF]

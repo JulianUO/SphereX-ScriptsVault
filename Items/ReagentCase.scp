@@ -1,0 +1,301 @@
+//****************************************************************************
+// SphereServer ©1997-2019
+// This script is part from the Sphere Community Script Pack.
+// You can download the full pack from: www.sphereserver.net
+//****************************************************************************
+VERSION=X1
+
+
+[DEFNAME MESSAGES_ITEMS]
+reagentcase_muylejos	"@,,2 500446"	// Eso está demasiado lejos.
+reagentcase_enelpiso	"Esto debe estar en el piso!"
+reagentcase_entupack	"El reagent debe estar en tu mochila."
+reagentcase_selecciona	"Debes seleccionar un reagent!"
+reagentcase_target		"Selecciona el reagent o bolsa."
+
+[defname defReagentCase]
+reagentcase_regs		"13"
+reagentcase_reg_1		"i_reag_black_pearl"
+reagentcase_reg_2		"i_reag_blood_moss"
+reagentcase_reg_3		"i_reag_garlic"
+reagentcase_reg_4		"i_reag_ginseng"
+reagentcase_reg_5		"i_reag_mandrake_root"
+reagentcase_reg_6		"i_reag_nightshade"
+reagentcase_reg_7		"i_reag_sulfur_ash"
+reagentcase_reg_8		"i_reag_spider_silk"
+
+reagentcase_reg_9		"i_reag_grave_dust"
+reagentcase_reg_10		"i_reag_nox_crystal"
+reagentcase_reg_11		"i_reag_daemon_bone"
+reagentcase_reg_12		"i_reag_batwing"
+reagentcase_reg_13		"i_reag_pig_iron"
+
+
+[ITEMDEF i_reg_case] 
+DEFNAME=i_reg_case 
+ID=02df4
+NAME=Especiero
+VALUE=20
+TYPE=t_container
+CATEGORY=UO Ascension
+SUBSECTION=Magery
+DESCRIPTION=Especiero
+
+ON=@Create
+COLOR=1150
+
+ON=@DropOn_Self
+return 1
+
+ON=@DClick
+if !<cont>
+	if <distance <src.uid>> > 3
+	src.sysmessage <def.reagentcase_muylejos>
+	return 1
+	endif
+else
+src.sysmessage <def.reagentcase_enelpiso>
+return 1
+endif
+f_resenddialog d_reagent_case
+sound 45
+return 1
+
+ON=@TargOn_Item
+if <argo.topobj.uid> != <src.uid>
+src.sysmessage <def.reagentcase_entupack>
+return 1
+endif
+if ((<argo.type> == t_container) && (<argo.count> != 0))
+ref15 = <uid>
+	forcont <argo.uid>
+		for 1 <def.reagentcase_regs>
+			if <baseid> == <def.reagentcase_reg_<dlocal._for>>
+			ref15.tag0.reagent_<dlocal._for> += <amount>
+			src.sysmessage Guardaste <amount> <name> en el case.
+			remove
+			endif
+		endfor
+	endfor
+ref15.target
+return 1
+endif
+if <argo.baseid> == i_bag
+	if <argo.count> != 0
+	src.sysmessage Esa bolsa tiene objetos dentro!
+	return 1
+	else
+	tag0.reagent_bolsas += 1
+	src.sysmessage Agregaste una bolsa!
+	argo.remove
+	target
+	return 1
+	endif
+endif
+for 1 <def.reagentcase_regs>
+	if <argo.baseid> == <def.reagentcase_reg_<dlocal._for>>
+		tag0.reagent_<dlocal._for> += <argo.amount>
+		src.sysmessage Guardaste <argo.amount> <argo.name> en el case.
+		argo.remove
+		target
+		return 1
+	endif
+endfor
+
+[DIALOG d_reagent_case]
+0,0
+page 0
+resizepic 0 0 9270 600 360
+checkertrans 0 0 0 0	
+resizepic 0 0 9270 220 360
+gumppic 568 -50 10441
+
+page 1
+dorigin 40 20
+dtext 80 20 1152 Reagents
+group 0
+for 1 <def.reagentcase_regs>
+dtext +0 *20 904 <serv.itemdef.<def.reagentcase_reg_<dlocal._for>>.name> [<dtag0.reagent_<dlocal._for>>]
+radio -20 +4 2362 2360 0 <dlocal._for>
+tilepic +125 +4 <resourceindex <def.reagentcase_reg_<dlocal._for>>>
+endfor
+dtext +0 *20 904 ----------------------
+dtext +0 *20 904 Bolsas [<dtag0.reagent_bolsas>]
+button -20 +4 2362 2360 1 0 1
+tilepic +125 +4 <resourceindex i_bag>
+
+dorigin 250 0 
+dtext +0 *20 1152 Magery
+dtext +0 *20 904 Retirar bolsa con 25 reagents
+button -20 +4 2362 2360 1 0 2
+dtext +0 *20 904 Retirar bolsa con 50 reagents
+button -20 +4 2362 2360 1 0 3
+dtext +0 *20 904 Retirar bolsa con 100 reagents
+button -20 +4 2362 2360 1 0 4
+
+dtext +0 *40 1152 Pagan
+dtext +0 *20 904 Retirar bolsa con 25 reagents
+button -20 +4 2362 2360 1 0 5
+dtext +0 *20 904 Retirar bolsa con 50 reagents
+button -20 +4 2362 2360 1 0 6
+dtext +0 *20 904 Retirar bolsa con 100 reagents
+button -20 +4 2362 2360 1 0 7
+
+dtext +0 *40 1152 Individuales
+dtext +0 *20 904 Retirar 25 del reagent seleccionado
+button -20 +4 2362 2360 1 0 8
+dtext +0 *20 904 Retirar 50 del reagent seleccionado
+button -20 +4 2362 2360 1 0 9
+dtext +0 *20 904 Retirar 100 del reagent seleccionado
+button -20 +4 2362 2360 1 0 10
+
+dtext +0 *40 1152 Ingresar reagents/bolsas
+button -20 +4 2362 2360 1 0 11
+
+[DIALOG d_reagent_case TEXT]
+
+[DIALOG d_reagent_case BUTTON]
+ON=0
+
+// Retirar bolsa vacia
+ON=1 
+if <tag0.reagent_bolsas> < 1
+src.sysmessage No tienes ninguna bolsa para retirar!
+return 1
+endif
+tag0.reagent_bolsas -= 1
+serv.newitem i_bag,1,<src.uid>
+f_resenddialog d_reagent_case
+
+// Retirar 25/50/100
+// Bolsa magery
+ON=2 4
+if <tag0.reagent_bolsas> < 1
+src.sysmessage No tienes ninguna bolsa!
+return 1
+endif
+doswitch <eval <argn> - 1>
+local.blank
+local.amount = 25
+local.amount = 50
+local.amount = 100
+enddo
+for 1 8 
+	if <tag0.reagent_<dlocal._for>> < <local.amount>
+	src.sysmessage No tienes suficiente <serv.itemdef.<def.reagentcase_reg_<dlocal._for>>.name>
+	return 1
+	endif
+endfor
+tag0.reagent_bolsas -= 1
+for 1 8
+tag0.reagent_<dlocal._for> -= <local.amount>
+endfor
+serv.newitem tm_reagent_bag_<dlocal.amount>,1,<src.uid>
+f_resenddialog d_reagent_case
+
+// Retirar 25/50/100
+// Bolsa pagana
+ON=5 7
+if <tag0.reagent_bolsas> < 1
+src.sysmessage No tienes ninguna bolsa!
+return 1
+endif
+doswitch <eval <argn> - 4>
+local.blank
+local.amount = 25
+local.amount = 50
+local.amount = 100
+enddo
+for 9 13
+	if <tag0.reagent_<dlocal._for>> < <local.amount>
+	src.sysmessage No tienes suficiente <serv.itemdef.<def.reagentcase_reg_<dlocal._for>>.name>
+	return 1
+	endif
+endfor
+tag0.reagent_bolsas -= 1
+for 9 13
+tag0.reagent_<dlocal._for> -= <local.amount>
+endfor
+serv.newitem tm_reagent_bag_<dlocal.amount>,1,<src.uid>
+f_resenddialog d_reagent_case
+
+// Retirar 25/50/100
+// Reagente especifico
+ON=8 10
+if <argchk> != 1
+src.sysmessage <def.reagentcase_selecciona>
+return 1
+endif
+doswitch <eval <argn> - 7>
+local.blank
+local.amount = 25
+local.amount = 50
+local.amount = 100
+enddo
+if <tag0.reagent_<argchkid>> < <local.amount>
+src.sysmessage No dispones de esa cantidad de <serv.itemdef.<def.reagentcase_reg_<argchkid>>.name>
+return 1
+endif
+tag0.reagent_<argchkid> -= <local.amount>
+serv.newitem <def.reagentcase_reg_<argchkid>>,<local.amount>,<src.uid>
+f_resenddialog d_reagent_case
+
+// Ingresar regs/bolsas
+ON=11
+target
+src.sysmessage <def.reagentcase_target>
+return 1
+
+[template tm_reagent_bag_25]
+DEFNAME=reg_bag25
+CATEGORY=Custom
+SUBSECTION=testing
+DESCRIPTION=reg_bag25
+CONTAINER=i_bag
+name=Bolsa de regs
+color=1150
+ITEM=i_reag_black_pearl, 25
+ITEM=i_reag_blood_moss, 25
+ITEM=i_reag_garlic, 25
+ITEM=i_reag_ginseng, 25
+ITEM=i_reag_mandrake_root, 25
+ITEM=i_reag_nightshade, 25
+ITEM=i_reag_sulfur_ash, 25
+ITEM=i_reag_spider_silk, 25
+ 
+[template tm_reagent_bag_50]
+DEFNAME=reg_bag50 //100t
+CATEGORY=Custom
+SUBSECTION=testing
+DESCRIPTION=reg_bag50
+CONTAINER=i_bag
+name=Bolsa de regs
+color=1150
+ITEM=i_reag_black_pearl, 50
+ITEM=i_reag_blood_moss, 50
+ITEM=i_reag_garlic, 50
+ITEM=i_reag_ginseng, 50
+ITEM=i_reag_mandrake_root, 50
+ITEM=i_reag_nightshade, 50
+ITEM=i_reag_sulfur_ash, 50
+ITEM=i_reag_spider_silk, 50
+
+[template tm_reagent_bag_100]
+DEFNAME=reg_bag100 //100t
+CATEGORY=Custom
+SUBSECTION=testing
+DESCRIPTION=reg_bag100
+CONTAINER=i_bag
+name=Bolsa de regs
+color=11100
+ITEM=i_reag_black_pearl, 100
+ITEM=i_reag_blood_moss, 100
+ITEM=i_reag_garlic, 100
+ITEM=i_reag_ginseng, 100
+ITEM=i_reag_mandrake_root, 100
+ITEM=i_reag_nightshade, 100
+ITEM=i_reag_sulfur_ash, 100
+ITEM=i_reag_spider_silk, 100
+
+
+[EOF]

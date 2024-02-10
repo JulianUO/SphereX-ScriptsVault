@@ -1,0 +1,118 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[ITEMDEF i_keg_potion]
+ID=i_keg_wood
+NAME=Empty Potion Keg
+TYPE=t_script
+VALUE={200 300}
+WEIGHT=40
+RESOURCES=8 i_board,1 i_barrel_tap,1 i_barrel_hoops
+SKILLMAKE=TINKERING 65.0,t_tinker_tools
+CATEGORY=Magic
+SUBSECTION=Potions (keg)
+DESCRIPTION=Empty Potion Keg
+
+ON=@Create
+maxamount = 1
+morep=0 0 0 // Number of potions stored in keg
+more1=0     // Store baseid of first potion (i_potion_heal)
+more2=0     // Store skillvalue off added potion
+// More1 is replaced with tag0.Keg.Potion.
+   
+ON=@AfterClick
+if <more1> != 0
+   tag0.keg.potion = <more1>
+endif
+if <morex> > 0
+   local.ClickMsgText = "Keg de <serv.itemdef.<tag0.keg.potion>.name> [<dmorex>]"
+endif
+   
+ON=@DClick
+if <more1> != 0
+   tag0.keg.potion = <more1>
+endif
+src.sysmessage @,,1 Selecciona una pocion para llenar el keg.
+target
+return 1
+   
+ON=@TargOn_Item
+if <src.action> != -1
+src.sysmessage @,,1 Estas ocupado haciendo otra cosa...
+return 1
+endif
+if <argo.baseid> == i_bottle_empty
+	if !<isempty <tag.keg.potion>>
+		if <morex> != 0
+			if <argo.topobj> == <src.uid>
+			src.sysmessage @,,1 Llenas una botella vacia...
+			sound snd_z_end_liquid
+			serv.newitem <tag0.keg.potion>,1,<src.findlayer.layer_pack.uid>
+			new.more2=<more2>
+			new.attr = 0
+			new.timer -1
+			morex -= 1
+				if <morex> == 0
+				tag.keg.potion
+				more2 = 0
+				endif
+			argo.consume 1
+			return 1
+			else
+			src.sysmessage @,,1 La botella vacia no esta en tu mochila!
+			return 1
+			endif
+		else
+		src.sysmessage @,,1 Este keg esta vacio!
+		return 1
+		endif
+	else
+	src.sysmessage @,,1 Este keg no tiene ninguna pocion!
+	return 1
+	endif
+elif <argo.type> == t_potion
+	if ((<isempty <tag.keg.potion>>) && (<morex> == 0))
+	tag.keg.potion = <argo.baseid>
+	endif
+	if <argo.baseid> == <tag0.keg.potion>
+		if <morex> != 100
+			if <argo.topobj.uid> == <src.uid>
+				if (<eval <argo.amount> + <morex>> > 99)
+				local.toconsume = <eval 100 - <morex>>
+				else
+				local.toconsume = <argo.amount>
+				endif
+			more2 *= <morex>
+			morex += <local.toconsume>
+			more2 += <eval <argo.morex> * <local.toconsume>>
+			more2 /= <morex>
+			src.sound snd_z_end_liquid
+			src.sysmessage @,,1 Llenas el keg con <qval <local.toconsume> == 1 ? una pocion:<dlocal.toconsume> pociones> de <argo.name>.
+			serv.newitem i_bottle_empty,<local.toconsume>
+			new.attr = 0
+			new.timer -1
+			new.bounce
+			src.consume <local.toconsume> <argo.baseid>
+			return 1	
+			else
+			src.sysmessage @,,1 La botella no esta en tu mochila!
+			return 1
+			endif
+		else
+		src.sysmessage @,,1 Este keg ya esta lleno!
+		return 1
+		endif	
+	else
+	src.sysmessage @,,1 No puedes mezclar distintas pociones!
+	return 1
+	endif
+else
+src.sysmessage @,,1 Que estas queriendo hacer que cosa??
+endif
+return 1
+
+[EOF]
