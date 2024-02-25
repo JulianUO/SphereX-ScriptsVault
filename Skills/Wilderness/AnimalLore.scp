@@ -1,0 +1,228 @@
+﻿// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+
+[SKILL 2]
+DEFNAME=SKILL_ANIMAL_LORE
+KEY=AnimalLore
+TITLE=Scholar
+FLAGS=SKF_SCRIPTED
+PROMPT_MSG=A qué animal debo mirar?
+DELAY=0.0
+STAT_STR=0
+STAT_DEX=0
+STAT_INT=70
+BONUS_STR=0
+BONUS_DEX=0
+BONUS_INT=100
+BONUS_STATS=50
+ADV_RATE=1.0,150.0,300.0
+
+ON=@Wait
+sysmessage <serv.skill.2.prompt_msg>
+targetf f_AnimalLoreSkill
+f_SkillWait 0,AnimalLore
+return 1
+
+
+// Skill function
+[FUNCTION f_AnimalLoreSkill]
+if !<isempty <args>>
+	ref5 = <args>
+else
+	if !<argo>
+		sysmessage <def.animallore_nochar>
+		f_SkillWait 2,AnimalLore
+		return 1
+	elif <argo.isitem>
+		sysmessage <def.animallore_nochar>
+		f_SkillWait 2,AnimalLore
+		return 1
+	endif
+	ref5 = <argo.uid>
+endif
+if ((!<canseelos <ref5.uid>>) || (<distance <ref5.uid>> >= 18))
+	sysmessage <def.animallore_noves>
+	return 1
+endif
+if !<ref5.npc>
+	sysmessage <def.animallore_nochar>
+	return 1
+endif
+if !<ref5.tag0.Barding.Diff> 
+	sysmessage <def.animallore_noanalizable>
+	return 1
+endif
+if ((<ref5.npc> == brain_animal) || (<ref5.npc> >= brain_monster))
+	if (((!<ref5.taming>) || (!<ref5.owner>)) && (<animallore> < 35.0))
+		sysmessage <def.animallore_onlytamed>
+		return 1
+	elif ((!<ref5.taming>) && (<animallore> <= 65.0))
+		sysmessage <def.animallore_onlytameable>
+		return 1
+	endif
+	local.RealDiff = <eval 50.0 + (2 * (<animallore> - <ref5.tag0.Barding.Diff>))>
+	local.rand = <eval <r<eval <local.realdiff> - 100>,<eval <local.realdiff> + 100>>>
+	if <local.rand> >= 950
+		local.rand = 950
+	endif
+	if (<r1000> < <local.rand>)
+		ref5.f_resenddialog d_AnimalLore,1
+		ctag0.ALView = <ref5.uid>
+		timerf 2,f_CheckAnimalLore
+		events +e_AnimalLore
+		f_SkillWait 1,AnimalLore
+		SkillGain AnimalLore <eval <local.rand> / 10>
+		return 1
+	endif
+	f_SkillWait 2,AnimalLore
+	SkillGain AnimalLore <min 1,<eval <AnimalLore> - 45.0>>
+	sysmessage <def.animallore_fail>
+endif
+return 1
+
+
+// Check if we still have him in sight
+// Otherwise close the dialog
+[FUNCTION f_CheckAnimalLore]
+if <isempty <ctag.AlView>>
+return 0
+else
+	if !<cansee <ctag0.AlView>>
+	dialogclose d_AnimalLore
+	ctag.AlView
+	return 0
+	endif
+timerf 2,f_CheckAnimalLore
+endif
+
+
+// Same as before
+// Otherwise close the dialog
+[EVENTS e_AnimalLore]
+ON=@EnvironChange
+if !<ctag0.ALView>
+	events -e_AnimalLore
+	return 0
+endif
+if !<cansee <ctag0.AlView>>
+	dialogclose d_AnimalLore
+	ctag.AlView
+	events -e_AnimalLore
+endif
+return 0
+
+
+// Animal Lore Menu
+[DIALOG d_AnimalLore]
+10,10
+
+page 0
+resizepic 0 0 5170 320 400
+dhtmlgump 2 4 320 25 0 0 <def.bfont_title><def.center><argo.name><def.centere>
+gumppic 278 80 2088
+gumppictiled 57  30 205 11 50
+gumppictiled 57 360 205 11 50
+
+dorigin 30 58
+dhtmlgump *0 *0 200 20 0 0 <def.bfont_skills>Slayer: <qval <isempty <f_Slayer_GetName <argo.slayer>>> ? -:<f_Slayer_GetName <argo.slayer>>>
+// dhtmlgump *0 *16 200 20 0 0 <def.bfont_skills>Pack Instincts: <qval !<isempty <argo.tag.packinstinct>> ? <argo.tag.packinstinct>:->
+dhtmlgump *0 *16 400 20 0 0 <def.bfont_skills>Karma: <argo.karma> | Fama: <argo.fame>
+
+page 1
+dorigin 30 80
+
+gumppic -2 *30 2086
+dhtmlgump  +18  -4 200 20 0 0 <def.bfont_title>Atributos
+gumppictiled +85 -2 145 16 58
+dhtmlgump   +0 *15 200 20 0 0 <def.bfont_skills>Hits
+dhtmlgump +110  *0 150 20 0 0 <def.div_right><def.bfont_skills><argo.hits> / <argo.maxhits>
+dhtmlgump   +0 *16 200 20 0 0 <def.bfont_skills>Stamina
+dhtmlgump +110  *0 150 20 0 0 <def.div_right><def.bfont_skills><argo.stam> / <argo.maxstam>
+dhtmlgump   +0 *16 200 20 0 0 <def.bfont_skills>Mana
+dhtmlgump +110  *0 150 20 0 0 <def.div_right><def.bfont_skills><argo.mana> / <argo.maxmana>
+
+dhtmlgump   +0 *28 200 20 0 0 <def.bfont_skills>Strength
+dhtmlgump +160  *0 100 20 0 0 <def.div_right><def.bfont_skills><argo.str>
+dhtmlgump   +0 *16 200 20 0 0 <def.bfont_skills>Dexterity
+dhtmlgump +160  *0 100 20 0 0 <def.div_right><def.bfont_skills><argo.dex>
+dhtmlgump   +0 *16 200 20 0 0 <def.bfont_skills>Intelligence
+dhtmlgump +160  *0 100 20 0 0 <def.div_right><def.bfont_skills><argo.int>
+
+dhtmlgump +0 *28 200 20 0 0 <def.bfont_skills>Damage
+dhtmlgump +110 *0 150 20 0 0 <def.div_right><def.bfont_skills><argo.dam.lo> - <argo.dam.hi>
+dhtmlgump +0 *16 200 20 0 0 <def.bfont_skills>Armor
+dhtmlgump +110 *0 150 20 0 0 <def.div_right><def.bfont_skills><argo.ar>
+
+gumppic -2 *35 2086
+dhtmlgump +18 -4 200 20 0 0 <def.bfont_title><def.big>Miscellaneous
+gumppictiled +118 -2 112 16 58
+dhtmlgump +18 *16 200 20 0 0 <def.bfont_skills>Dificultad de Taming
+tilepic -9 +0 9900 // 3764
+dhtmlgump +160 *0 100 20 0 0 <def.div_right><def.bfont_skills><qval <argo.taming> ? <fval <argo.TamingMinSkill>>%:-.-%>
+dhtmlgump +18 *18 200 20 0 0 <def.bfont_skills>Dificultad de Bardo
+dhtmlgump +160 *0 100 20 0 0 <def.div_right><def.bfont_skills><qval <argo.tag0.barding.diff> ? <argo.tag0.barding.diff>%:->
+
+button 265 359 2224 2224 0 2 0
+button 34 359 2223 2223 0 2 0
+
+page 2
+dorigin 30 80
+gumppic -2 *30 2086
+dhtmlgump +18 -4 200 20 0 0 <def.bfont_title>Skills de Combate
+gumppictiled +150 -2 80 16 58
+dhtmlgump +0 *16 150 20 0 0 <def.bfont_skills>Wrestling
+dhtmlgump +0 *16 150 20 0 0 <def.bfont_skills>Tactics
+dhtmlgump +0 *16 150 20 0 0 <def.bfont_skills>Resisting Spells
+dhtmlgump +0 *16 150 20 0 0 <def.bfont_skills>Anatomy
+dhtmlgump +0 *16 150 20 0 0 <def.bfont_skills>Poisoning
+
+ref5 = <argo.uid>
+args = "43,27,26,1,30,25,16,46"
+for 0 <eval <argv> - 1>
+	if <ref5.<dargv[<local._for>]>> == 0.0
+		local.SkillString_<dargv[<local._for>]> = "<def.div_right><def.bfont_skills>-.-%"
+		continue
+	endif
+	local.SkillString_<dargv[<local._for>]> = "<def.div_right><def.bfont_skills><ref5.<serv.skill.<dargv[<local._for>]>.key>>%"
+	if <ref5.tag0.Override.SkillCap_<dargv[<local._for>]>>
+		local.SkillString_<dargv[<local._for>]> .= " [<fval <ref5.tag0.Override.SkillCap_<dargv[<local._for>]>>>%]"
+	endif
+endfor
+
+dorigin 30 110
+dhtmlgump +110 *16 150 20 0 0 <local.SkillString_43>
+dhtmlgump +110 *16 150 20 0 0 <local.SkillString_27>
+dhtmlgump +110 *16 150 20 0 0 <local.SkillString_26>
+dhtmlgump +110 *16 150 20 0 0 <local.SkillString_1>
+dhtmlgump +110 *16 150 20 0 0 <local.SkillString_30>
+
+gumppic *0 *45 2086
+dhtmlgump +18 -4 200 20 0 0 <def.bfont_title>Hechizeria
+gumppictiled +95 -2 135 16 58
+
+dhtmlgump   +0 *16 150 20 0 0 <def.bfont_skills>Magery
+dhtmlgump +110  *0 150 20 0 0 <local.SkillString_25>
+dhtmlgump   +0 *16 150 20 0 0 <def.bfont_skills>Eval. Intelligence
+dhtmlgump +110  *0 150 20 0 0 <local.SkillString_16>
+dhtmlgump   +0 *16 150 20 0 0 <def.bfont_skills>Meditation
+dhtmlgump +110  *0 150 20 0 0 <local.SkillString_46>
+
+button 265 359 2224 2224 0 1 0
+button 34 359 2223 2223 0 1 0
+
+
+[DEFNAME defMessages_AnimalLore]
+animallore_noves				"No alcanzas a ver al objetivo."
+animallore_noanalizable			"Esa criatura es imposible de analizar!"
+animallore_onlytamed			"Solo puedes analizar animales domesticads."
+animallore_onlytameable			"Solo puedes analizar animales domesticables."
+animallore_fail					"No logras analizar a esa criatura."
+animallore_nochar				"Deberias intentar con otras habilidades."
+
+
+[EOF]
