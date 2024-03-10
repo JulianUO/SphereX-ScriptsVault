@@ -1,0 +1,436 @@
+// *************************************************************
+// SphereServerX @ UOAscension @ 2019
+// This script is part from the Sphere Community Script Pack.
+// Download the full pack from SphereCommunity.net
+// ************************************************************
+VERSION=X1
+
+[SPEECH spk_HumanBarber]
+ON=*buy*
+if (<src.flags> & statf_dead)
+	src.sysmessage No puedes usar los servicios del estilista en este estado.
+	return 1
+elif (!<src.f_isHuman>) || (<src.flags> & statf_polymorph)
+	src.sysmessage Tu forma actual no permite estilizar tu cabello.
+	return 1
+endif
+dialogclose d_hair_style
+dialogclose d_beard_style
+dialogclose d_hair_dye
+f_ResendDialog d_HairStylist
+
+
+[CHARDEF c_hairstylist]
+ID=c_man
+NAME=#NAMES_HUMANMALE el barbero
+TSPEECH=spk_HumanDefault
+TSPEECH=spk_HumanBarber
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_Refuse
+CATEGORY=Civilized
+SUBSECTION=Tradesmen
+DESCRIPTION=Hairstylist (human male)
+
+ON=@Create
+	COLOR=colors_skin_human
+	NPC=brain_vendor
+	STR={55 65}
+	DEX={55 65}
+	INT={55 65}
+	ITEMNEWBIE=random_light
+	ITEMNEWBIE=random_male_hair
+		 COLOR=colors_hair_human
+	 ITEM=i_robe
+	COLOR=colors_brown
+	 ITEM=i_sandals
+	COLOR=colors_brown
+
+
+[CHARDEF c_hairstylist_f]
+ID=c_woman
+NAME=#NAMES_HUMANFEMALE la peluquera
+TSPEECH=spk_HumanDefault
+TSPEECH=spk_HumanBarber
+TEVENTS=e_Human_Needs
+TEVENTS=e_Human_Refuse
+CATEGORY=Civilized
+SUBSECTION=Tradesmen
+DESCRIPTION=Hairstylist (human female)
+ON=@Create
+	COLOR=colors_skin_human
+	NPC=brain_vendor
+	STR={55 65}
+	DEX={55 65}
+	INT={55 65}
+	ITEMNEWBIE=random_light
+	ITEMNEWBIE=random_female_hair
+		 COLOR=colors_hair_human
+	 ITEM=i_robe
+	COLOR=colors_brown
+	 ITEM=i_sandals
+	COLOR=colors_brown
+	
+
+// Configuration
+// From main menu to colors.
+[DEFNAME HairStylistMenu]
+HairStylist.Menu.1		Corte de pelo,			      1000,	d_hair_style
+HairStylist.Menu.2		Corte de barba,			      1000,	d_beard_style
+HairStylist.Menu.3		Tintura normal completa,       250,	d_hair_dye, 1, 1
+HairStylist.Menu.5		Tintura normal de pelo,	       150,	d_hair_dye, 1, 0
+HairStylist.Menu.6		Tintura normal de barba,       150,	d_hair_dye, 0, 1
+HairStylist.Menu.4		Tintura especial completa,	750000,	d_hair_dye, 1, 1
+HairStylist.Menu.7		Tintura especial de pelo,	500000,	d_hair_dye, 1, 0
+HairStylist.Menu.8		Tintura especial de barba,	500000,	d_hair_dye, 0, 1
+
+[DEFNAME HairStylesHuman]
+Hair.Style.Human.1.Male		i_hair_short,		0c60c,	-67,	-40
+Hair.Style.Human.2.Male		i_hair_pageboy,		0ed26,	-67,	-42
+Hair.Style.Human.3.Male		i_hair_mohawk,		0c60f,	-67,	-35
+Hair.Style.Human.4.Male		i_hair_long,		0c60d,	-67,	-50
+Hair.Style.Human.5.Male		i_hair_curly,		0c618,	-67,	-40
+Hair.Style.Human.6.Male		i_hair_topknot,		0ed29,	-63,	-40
+Hair.Style.Human.7.Male		i_hair_ponytail,	0c60e,	-67,	-50
+Hair.Style.Human.8.Male		i_hair_2_pigtails,	0c612,	-67,	-50
+Hair.Style.Human.9.Male		i_hair_receding,	0ede5,	-68,	-40
+Hair.Style.Human.1.Female	i_hair_short,		0ed1c,	-67,	-40
+Hair.Style.Human.2.Female	i_hair_pageboy,		0ed26,	-67,	-42
+Hair.Style.Human.3.Female	i_hair_mohawk,		0ed27,	-67,	-35
+Hair.Style.Human.4.Female	i_hair_long,		0ed1d,	-67,	-50
+Hair.Style.Human.5.Female	i_hair_curly,		0ed25,	-67,	-40
+Hair.Style.Human.6.Female	i_hair_topknot,		0ed29,	-63,	-40
+Hair.Style.Human.7.Female	i_hair_ponytail,	0ed1e,	-67,	-50
+Hair.Style.Human.8.Female	i_hair_2_pigtails,	0ede6,	-67,	-50
+Hair.Style.Human.9.Female	i_hair_buns,		0ed28,	-68,	-40
+
+[DEFNAME HairStylesElf]
+Hair.Style.Elf.1.Male		i_hair_long_feather,	0c6e5,	-67,	-42
+Hair.Style.Elf.2.Male		i_hair_short1,			0c6e6,	-67,	-40
+Hair.Style.Elf.3.Male		i_hair_elven_mullet,	0c6e7,	-67,	-42
+Hair.Style.Elf.4.Male		i_hair_elven_topknot,	0c6cc,	-67,	-40
+Hair.Style.Elf.5.Male		i_hair_elven_braid,		0c6cd,	-67,	-42
+Hair.Style.Elf.6.Male		i_hair_elven_spike,		0c6cf,	-67,	-40
+Hair.Style.Elf.7.Male		i_hair_elven_ml,		0c6e4,	-67,	-42
+Hair.Style.Elf.8.Male		i_hair_elven_long,		0c6cb,	-67,	-45
+Hair.Style.Elf.1.Female		i_hair_long_feather,	0edf5,	-65,	-42
+Hair.Style.Elf.2.Female		i_hair_short1,			0edf6,	-67,	-42
+Hair.Style.Elf.3.Female		i_hair_elven_mullet,	0edf7,	-67,	-45
+Hair.Style.Elf.4.Female		i_hair_elven_topknot,	0eddc,	-67,	-42
+Hair.Style.Elf.5.Female		i_hair_elven_braid,		0eddd,	-67,	-45
+Hair.Style.Elf.6.Female		i_hair_elven_spike,		0eddf,	-65,	-40
+Hair.Style.Elf.7.Female		i_hair_elven_flower,	0edda,	-65,	-45
+Hair.Style.Elf.8.Female		i_hair_elven_buns,		0edde,	-65,	-45
+
+[DEFNAME BeardStyles]
+Beard.Style.Human.1		i_beard_goatee,		0c670,	-67,	-50
+Beard.Style.Human.2		i_beard_short_med,	0c6d8,	-67,	-47
+Beard.Style.Human.3		i_beard_vandyke,	0c6da,	-67,	-50
+Beard.Style.Human.4		i_beard_long,		0c671,	-67,	-55
+Beard.Style.Human.5		i_beard_short,		0c672,	-67,	-47
+Beard.Style.Human.6		i_beard_long_med,	0c6d9,	-67,	-55
+Beard.Style.Human.7		i_beard_mustache,	0c678,	-67,	-48
+
+[DEFNAME HairDyes]
+Hair.Dye.Normal.1		1602, 1627	//Brown
+Hair.Dye.Normal.2		1628, 1654	//Chestnut
+Hair.Dye.Normal.3		1502, 1533	//Auburn
+Hair.Dye.Normal.4		1302, 1333	//Blue
+Hair.Dye.Normal.5		1402, 1433	//Green
+Hair.Dye.Normal.6		1202, 1225	//Red
+Hair.Dye.Normal.7		2402, 2430	//Light
+Hair.Dye.Normal.8		2213, 2218	//Blonde
+Hair.Dye.Normal.9		1102, 1109	//Black
+Hair.Dye.Normal.10		1110, 1117	//Beige
+Hair.Dye.Normal.11		1118, 1133	//Golden
+Hair.Dye.Normal.12		1134, 1149	//Dark Brown
+
+[DEFNAME HairDyesSpecial]
+Hair.Dye.Bright.1		12, 21		//Purple
+Hair.Dye.Bright.2		32, 36		//Red
+Hair.Dye.Bright.3		38, 45		//Orange
+Hair.Dye.Bright.4		54, 56		//Yellow
+Hair.Dye.Bright.5		62, 71		//Green
+Hair.Dye.Bright.6		81, 82		//Light Green
+Hair.Dye.Bright.7		89, 90		//Blue
+Hair.Dye.Bright.8		1153, 1154	//White
+
+
+// Stylist main menu
+// From here we should open every other menu.
+[DIALOG d_HairStylist]
+50,50
+nodispose
+
+page 0
+args = <qval ((<src.f_isHuman>) && !(<src.f_isFemale>)) ? "1,2,3,4,5,6,7,8" : "1,3,4">
+local.entries = <args>
+resizepic  0  0 1755 450 <eval 100 + (<argv> * 25)>
+resizepic 20 20 3500 410 <eval  60 + (<argv> * 25)>
+
+page 1
+dorigin 45 26
+for <argv>
+	args = <def.hairstylist.menu.<dstrarg <local.entries>>>
+	button +0 *25 1605 1604 1 0 <dstrarg <local.entries>>
+	dhtmlgump +30 +2 300 20 0 0 <argv[0]> (<argv[1]> gold)
+	local.entries = <streat <local.entries>>
+endfor
+
+[DIALOG d_hairstylist BUTTON]
+ON=1,8
+if !(<src.canseelos <uid>>)
+	return 1
+elif !((<src.f_ishuman>) && !(<src.f_isfemale>)) && !((<argn>==1) || (<argn>==3) || (<argn>==4))
+	return 1
+endif
+src.ctag.hairstylist.dye.palette = <qval ((<argn>==4) || (<argn>==7) || (<argn>==8))? "bright" : "normal">
+args = <def.hairstylist.menu.<argn>>
+src.ctag.hairstylist.price = <argv[1]>
+src.ctag.hairstylist.dye.hair = <argv[3]>
+src.ctag.hairstylist.dye.beard = <argv[4]>
+f_ResendDialog <argv[2]>
+
+
+// Change hair style
+// Should differ from woman/man
+[DIALOG d_hair_style]
+50,50
+
+page 0
+resizepic  0  0 1755 450 400
+resizepic 20 20 3500 410 360
+dhtmlgump 50 40 350 25 1 0 <def.big><def.center>Estilo de Pelo
+
+page 1
+local.Gender = <qval <src.f_isFemale> ? "Female" : "Male">
+local.Race = <qval <src.f_IsElf> ? "Elf" : "Human">
+for 9
+	local.x = <eval ((<local._for> - 1) % 3) * 123>
+	local.y = <eval ((<local._for> - 1) / 3) * 65>
+	args = <def.Hair.Style.<local.Race>.<dlocal._for>.<local.Gender>>
+	if !(<isempty <args>>)
+		radio <eval 45 + <local.x>> <eval 88 + <local.y>> 1606 1608 0 <local._for>
+		resizepic <eval 85 + <local.x>> <eval 75 + <local.y>> 1755 50 50
+		gumppic <eval 85+<local.x>+<argv[2]>> <eval 75 + <local.y> + <argv[3]>> <argv[1]>
+	endif
+endfor
+radio 45 280 1606 1608 0 10
+dtext 85 283 07f9 Raparse [Perderas el color de pelo]
+button 220 330 1605 1604 1 0 1
+button 319 330 1604 1605 1 0 0
+dtext 250 332 07f9 Confirmar
+dtext 349 332 07f9 Cancelar
+
+[DIALOG d_hair_style BUTTON]
+ON=0
+f_ResendDialog d_HairStylist
+
+ON=1 10
+if !<src.canseelos <uid>>
+	say Acercate! No puedo trabajar desde tan lejos!
+	return 1
+endif
+if !<src.isgm>
+	if (<src.gold> < <src.ctag0.HairStylist.Price>)
+		src.ctag.HairColorPreview
+		src.ctag.BeardColorPreview
+		say No puedes costear mis servicios, lo lamento.
+		return 1
+	endif
+	src.gold -= <src.ctag0.HairStylist.Price>
+	src.sysmessage <src.dctag0.HairStylist.Price> gp han sido tomados de tu banco.
+endif
+local.Race = <qval <src.f_isElf> ? "Elf" : "Human">
+local.Gender = <qval <src.f_isFemale> ? "Female" : "Male">
+args = <def.Hair.Style.<local.Race>.<argchkid>.<local.Gender>>
+ref1 = <src.findlayer.layer_hair>
+if (<ref1>)
+	local.color = <ref1.color>
+	ref1.remove
+endif
+if !(<isempty <argv[0]>>)
+	newitem <argv[0]>
+	new.color = <local.color>
+	new.equip <src>
+endif
+
+
+// Change beard style
+[DIALOG d_beard_style]
+50,50
+
+page 0
+resizepic  0  0 1755 450 400
+resizepic 20 20 3500 410 360
+dhtmlgump 50 40 350 25 1 0 <def.big><def.center>Estilo de Barba
+
+page 1
+for 7
+	local.x = <eval ((<local._for> - 1) % 3) * 123>
+	local.y = <eval ((<local._for> - 1) / 3) * 70>
+	args = <def.Beard.Style.Human.<dlocal._for>>
+	if !(<isempty <args>>)
+		radio <eval 45 + <local.x>> <eval 88 + <local.y>> 1606 1608 0 <local._for>
+		resizepic <eval 85 + <local.x>> <eval 75 + <local.y>> 1755 50 50
+		gumppic <eval 85+<local.x>+<argv[2]>> <eval 75 + <local.y> + <argv[3]>> <argv[1]>
+	endif		
+endfor
+radio 45 280 1606 1608 0 8
+dtext 85 283 07f9 Afeitarse [Perderas el color de barba]
+button 220 330 1605 1604 1 0 1
+button 319 330 1604 1605 1 0 0
+dtext 250 332 07f9 Confirmar
+dtext 349 332 07f9 Cancelar
+
+[DIALOG d_beard_style BUTTON]
+ON=0
+f_ResendDialog d_HairStylist
+
+ON=1,8
+if !<src.canseelos <uid>>
+	say Acercate! No puedo trabajar desde tan lejos!
+	return 1
+endif
+if !<src.isgm>
+	if (<src.gold> < <src.ctag0.HairStylist.Price>)
+		src.ctag.HairColorPreview
+		src.ctag.BeardColorPreview
+		say No puedes costear mis servicios, lo lamento.
+		return 1
+	endif
+	src.gold -= <src.ctag0.HairStylist.Price>
+	src.sysmessage <src.dctag0.HairStylist.Price> gp han sido tomados de tu banco.
+endif
+args = <def.Beard.Style.Human.<argchkid>>
+ref1 = <src.findlayer.layer_beard>
+if (<ref1>)
+	local.color = <ref1.color>
+	ref1.remove
+endif
+if !(<isempty <argv[0]>>)
+	newitem <argv[0]>
+	new.color = <local.color>
+	new.equip <src>
+endif
+
+
+// Change hair/beard color
+[DIALOG d_hair_dye]
+50,50
+
+page 0
+resizepic  0  0 1755 650 400
+resizepic 20 20 3500 350 360
+dhtmlgump  50  40 290 25 1 0 <def.big><def.center>Coloracion del Cabello
+dtext 195 339 07f9 Teñir con este color
+button 327 339 1537 1538 1 0 1
+
+local.chargump = <qval <src.f_isFemale> ? 13 : 12>
+gumppic 390 18 1800 0
+gumppic 413 50 <dlocal.chargump> <eval <hval <src.color>&~08000>>
+for 3 24
+	if ((<local._for> != 11) && (<local._for> != 16) && (<local._for> != layer_pack) && (<local._for> != layer_talisman))
+		if <src.findlayer.<local._for>>
+			local.item = <eval <serv.tiledata.item(<src.findlayer.<local._for>.dispiddec>).anim> + 50000>
+			if <src.findlayer.<local._for>.color>
+				gumppic 413 50 <local.item> <eval <src.findlayer.<local._for>.color> - 1>
+			else
+				gumppic 413 50 <local.item>
+			endif
+		endif
+	endif
+endfor
+if <src.findlayer.layer_hair>
+	if <src.ctag0.HairColorPreview>
+		local.color = <eval <src.ctag0.HairColorPreview> - 1>
+	else
+		local.color = <qval <src.findlayer.layer_hair.color> ? <eval <src.findlayer.layer_hair.color> - 1> : 0>
+	endif
+	gumppic 413 50 <eval <serv.tiledata.item(<src.findlayer.layer_hair.dispiddec>).anim> + 50000> <dlocal.color>
+endif
+if <src.findlayer.layer_beard>
+	if <src.ctag0.BeardColorPreview>
+		local.color = <eval <src.ctag0.BeardColorPreview> - 1>
+	else
+		local.color = <qval <src.findlayer.layer_beard.color> ? <eval <src.findlayer.layer_beard.color> - 1> : 0>
+	endif
+	// local.color = <qval <src.findlayer.layer_beard.color> ? <eval <src.findlayer.layer_beard.color> - 1> : 0>
+	gumppic 413 50 <eval <serv.tiledata.item(<src.findlayer.layer_beard.dispiddec>).anim> + 50000> <dlocal.color>
+endif
+while !(<isempty <def.Hair.Dye.<src.ctag0.Hairstylist.Dye.Palette>.<eval <local._while> + 1>>>)
+	args = <def.Hair.Dye.<src.ctag0.Hairstylist.Dye.Palette>.<eval <local._while> + 1>>
+	if <argv[0]> != 0
+		dtext  70 <eval 71 + (<local._while> * 22)> <eval <argv[0]> - 1> ******
+		button 40 <eval 70 + (<local._while> * 22)> 1539 1540 0 <eval <local._while> + 1> 0
+	endif
+endwhile
+local._while
+while !(<isempty <def.Hair.Dye.<src.ctag0.Hairstylist.Dye.Palette>.<eval <local._while> + 1>>>)
+	args = <def.Hair.Dye.<src.ctag0.Hairstylist.Dye.Palette>.<eval <local._while> + 1>>
+	page <eval <local._while> + 1>
+	local.n
+	for <argv[0]> <argv[1]>
+		if (<local.n> < 24)
+			dtext <eval 190 + ((<local.n> / 12) * 90)> <eval 71 + ((<local.n> % 12) * 22)> <eval <local._for> - 1> *****
+			button <eval 160 + ((<local.n> / 12) * 90)> <eval 70 + ((<local.n> % 12) * 22)> 1531 1532 1 0 <local._for>
+			local.n ++
+		endif
+	endfor
+endwhile
+
+[DIALOG d_hair_dye BUTTON]
+ON=0
+src.ctag.HairColorPreview
+src.ctag.BeardColorPreview
+f_ResendDialog d_HairStylist
+return 1
+
+ON=1
+if (<src.ctag0.HairColorPreview> == 0) && (<src.ctag0.BeardColorPreview> == 0)
+	src.sysmessage No seleccionaste ningun color...
+	f_ResendDialog d_hair_dye,1
+endif
+if !<src.canseelos <uid>>
+	say Acercate! No puedo trabajar desde tan lejos!
+	return 1
+endif
+if !<src.isgm>
+	if (<src.gold> < <src.ctag0.HairStylist.Price>)
+		src.ctag.HairColorPreview
+		src.ctag.BeardColorPreview
+		say No puedes costear mis servicios, lo lamento.
+		return 1
+	endif
+	src.gold -= <src.ctag0.HairStylist.Price>
+	src.sysmessage <src.dctag0.HairStylist.Price> gp han sido tomados de tu banco.
+endif
+if <src.ctag0.HairColorPreview>
+	if <src.findlayer.layer_hair>
+		src.findlayer.layer_hair.color = <src.ctag0.HairColorPreview>
+	endif
+endif
+if <src.ctag0.BeardColorPreview>
+	if <src.findlayer.layer_beard>
+		src.findlayer.layer_beard.color = <src.ctag0.BeardColorPreview>
+	endif
+endif
+
+ON=2,3500
+if <src.ctag0.HairStylist.Dye.Hair>
+	src.ctag0.HairColorPreview = <argn>
+endif
+if <src.ctag0.HairStylist.Dye.Beard>
+	src.ctag0.BeardColorPreview = <argn>
+endif
+local.choose = <argn>
+while !(<isempty <def.Hair.Dye.<src.ctag0.HairStylist.Dye.Palette>.<eval <local._while> + 1>>>)
+	args = <def.Hair.Dye.<src.ctag0.HairStylist.Dye.Palette>.<eval <local._while>>>
+	if ((!<isempty <argv[0]>>) && (!<isempty <argv[1]>>))
+		if ((<local.choose> >= <argv[0]>) && (<local.choose> <= <argv[1]>))
+			local.page = <eval <local._while>>
+		endif
+	endif
+endwhile
+f_ResendDialog d_hair_dye,<local.page>
+
+[EOF]
